@@ -1,0 +1,8 @@
+python 10
+pip install django
+pip install mysqlclient
+pip install -r requirements.txt
+python -m venv venv
+venv/Scripts/Activate
+python manage.py runserver 0.0.0.0:8000
+instalamos o wampserver
