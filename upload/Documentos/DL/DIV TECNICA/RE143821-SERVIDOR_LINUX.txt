@@ -1,0 +1,13 @@
+
+## BEHIND PROXYS
+pip install --proxy=http://39768940875:68210821Brn@proxy.policiamilitar.sp.gov.br:3128 -r requeriments.txt
+
+
+## TRUSTED HOSTS
+pip install --proxy=http://39768940875:68210821Brn@proxy.policiamilitar.sp.gov.br:3128 --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements.txt
+
+export http_proxy=http://39768940875:68210821Brn@proxy.policiamilitar.sp.gov.br:3128
+
+Server: 10.61.9.84 
+user: dladm
+pass: 3aj7d!wrA-$gu8oC2isp

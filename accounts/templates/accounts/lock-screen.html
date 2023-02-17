@@ -1,0 +1,47 @@
+{% extends 'baselogin.html' %}
+{% block title %}
+    Chamado | Lockscreen
+{% endblock title %}
+{% load static %}
+{% block baselogin %}
+
+
+<div class="container-fluid">
+	<div class="row min-vh-100 bg-100">
+		<div class="col-6 d-none d-lg-block position-relative">
+			<div class="bg-holder" style="background-image:url({% static 'img/generic/18.jpg' %});"></div>
+			<!--/.bg-holder-->
+		</div>
+		<div class="col-sm-10 col-md-6 px-sm-0 align-self-center mx-auto py-5">
+			<div class="row justify-content-center g-0">
+				<div class="col-lg-9 col-xl-8 col-xxl-6">
+					<div class="card">
+						<div class="card-header bg-circle-shape bg-shape text-center p-2"><a class="font-sans-serif fw-bolder fs-4 z-index-1 position-relative link-light light" href="../../../index-2.html">MikeBook</a></div>
+						<div class="card-body p-4">
+							<div class="row justify-content-center">
+								<div class="col-auto">
+									<div class="d-flex align-items-center">
+										<div class="avatar avatar-4xl me-4">
+											<img class="rounded-circle" src="{% static 'img/team/1.jpg ' %}" alt="">
+										</div>
+										<div class="flex-1">
+											<h4>Chamado-DP</h4>
+											<p class="mb-0">Digite sua senha <br>para voltar para o sistema.</p>
+										</div>
+									</div>
+									<form class="mt-4 row gx-2">
+										<div class="col"><input class="form-control" type="password" placeholder="Senha" aria-label="User's password" aria-describedby="user-password"></div>
+										<div class="col-4"><button class="btn btn-primary d-block w-100" id="user-password" type="button">Login</button></div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock baselogin %}

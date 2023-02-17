@@ -1,0 +1,241 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block content %}
+{% load _counters %}
+{% load _popup_notification %}
+
+<div class="row">
+	{% if request.user.is_staff %}		 
+		{% admin_counters %}
+		<div class="col-12">
+			<hr>
+			<div class="row g-3 mb-3 ">
+				{% if admindash.pendentes != 0 %}
+				<div class="col-sm-6 col-md-4">
+					<a class="link-danger box-hover d-block" name="cpendencias" id="cpendencias" href="{% url 'administration:admin_list_request' %}">
+						<div class="card overflow-hidden" style="min-width: 12rem">
+							<div class="bg-holder bg-card" style="background-image:url({% static 'img/icons/spot-illustrations/corner-1.png' %});"></div>
+							<!--/.bg-holder-->
+							<div class="card-body position-relative text-center">	
+								<div class="display-2 fs-2 fw-bold fa-bounce font-sans-serif text-danger">Pendências - {{ admindash.pendentes }}
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				{% else %}
+				<div class="col-sm-6 col-md-4">
+					<a class="link-success box-hover d-block" href="{% url 'administration:admin_list_request' %}">
+						<div class="card overflow-hidden" style="min-width: 12rem">
+							<div class="bg-holder bg-card" style="background-image:url({% static 'img/icons/spot-illustrations/corner-3.png'%});"></div>
+							<!--/.bg-holder-->
+							<div class="card-body position-relative">
+								<div class="display-2 fs-2 fw-bold text-center font-sans-serif text-success">Não há Pendências
+								</div> 
+							</div>
+						</div>
+					</a>
+					</div>
+				{% endif %}
+				<div class="col-sm-6 col-md-4">
+					<a class="link-warning box-hover d-block" name="canalise" id="canalise" href="{% url 'administration:admin_list_analyse_request' %}">
+						<div class="card overflow-hidden" style="min-width: 12rem">
+							<div class="bg-holder bg-card" style="background-image:url({% static 'img/icons/spot-illustrations/corner-2.png'%});"></div>
+							<!--/.bg-holder-->
+							<div class="card-body position-relative">		
+								<div class="display-2 fs-2 fw-bold text-center font-sans-serif text-warning" >Análise - {{ admindash.analise }}
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				
+				<div class="col-sm-6 col-md-4">
+				<a class="link-success box-hover d-block" href="{% url 'administration:admin_list_finished_request' %}">
+					<div class="card overflow-hidden" style="min-width: 12rem">
+						<div class="bg-holder bg-card" style="background-image:url({% static 'img/icons/spot-illustrations/corner-3.png'%});"></div>
+						<!--/.bg-holder-->
+						<div class="card-body position-relative">
+							<div class="display-2 fs-2 fw-bold text-center font-sans-serif text-success">Resolvidos
+							</div> 
+						</div>
+					</div>
+				</a>
+				</div>
+				
+				<div class="col-12">
+					<a class="link-dark box-hover d-block" href="{% url 'administration:admin_list_login_audit' %}">
+						<div class="card overflow-hidden" style="min-width: 12rem">
+							<div class="bg-holder bg-card" style="background-image:url({% static 'img/icons/spot-illustrations/corner-5.png'%});"></div>
+							<!--/.bg-holder-->
+							<div class="card-body position-relative">		
+								<div class="display-2 fs-2 fw-normal text-center font-sans-serif text-dark">Aditoria Login de Usuários
+								</div> 
+							</div>
+						</div>
+					</a>
+				</div>
+			</div>	
+			<hr>
+			<div class="row">
+				<div class="col-sm-12 col-sm-6 col-md-6">
+					<a class="link-success box-hover d-block" href="{% url 'solicitation:make_request' %}">
+						<div class="card overflow-hidden" style="min-width: 12rem">
+							<div class="bg-holder bg-card" style="background-image:url({% static 'img/icons/spot-illustrations/corner-3.png' %});"></div>
+							<!--/.bg-holder-->
+							<div class="card-body position-relative">					
+	
+								<div class="display-2 fs-2 fw-normal text-center font-sans-serif text-success" >Solicitar Chamado <i class="fas fa-plus-circle"> </i></div>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="col-sm-12 col-sm-6 col-md-6">
+					<a class="link-primary box-hover d-block" href="{% url 'solicitation:user_list_request' %}">
+						<div class="card overflow-hidden" style="min-width: 12rem">
+							<div class="bg-holder bg-card" style="background-image:url({% static 'img/icons/spot-illustrations/corner-2.png'%});"></div>
+							<!--/.bg-holder-->
+							<div class="card-body position-relative">
+	
+								<div class="display-2 fs-2 fw-normal text-center font-sans-serif text-info" >Minhas Solicitações <i class="far fa-list-alt"> </i></div>
+							</div>
+						</div>
+					</a>
+				</div>				
+			</div>	
+	</div>
+	{% endif %}
+</div>	
+
+{% if messages %}
+	{% for message in messages%}
+		<div {% if message.tags %} class="alert {{ message.tags }} {% endif %} border-2 d-flex align-items-center" role="alert">
+			<p class="mb-0 fs-1 text-center flex-1">{{ message}}</p>
+			<button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+{% endif %}	
+
+{% if not request.user.is_staff and not request.user.is_admin  %}
+	<div class="row">
+		<div class="col-xl-12 col-lg-12 col-md-12">
+			<div class="card bg-transparent-50 overflow-hidden">
+				<div class="card-header position-relative">
+					<div class="bg-holder d-none d-md-block bg-card z-index-1" style="background-image:url({% static 'img/icons/spot-illustrations/corner-4.png'%});background-position:right bottom;z-index:-1;"></div>
+					<!--/.bg-holder-->
+						<div class="position-relative text-center z-index-2">
+							<div>
+								<h3 class="text-primary mb-1">Olá, 
+									{{ request.session.postoo }} 
+									{{ request.session.nomeguerra|title }}!</h3>
+									<h3 class="fw-light overflow-hidden"><span class="typed-text fw-bold ms-1" data-typed-text='["Aproveite o Sistema de Chamados.","Faça suas solicitações.","Acompanhe seus chamados.","Tire suas dúvidas!"]'></span></h3>
+			
+								<p> </p>
+							
+							<div class="d-flex py-3">
+								<div class="row text-center fs-1">
+									<div class="col-md-3 m-2">
+										<p class=" badge rounded-pill badge-soft-danger">Pendentes</p>
+										<h4 class=" text-center mb-0">{{ dashboard.pendentes }}</h4>
+									</div>
+									<div class="col-md-3 m-2">
+										<p class=" badge rounded-pill badge-soft-warning">Em Análise</p>
+										<h4 class=" text-center mb-0">{{ dashboard.analise }}</h4>
+									</div>
+									<div class="col-md-3 m-2">
+										<p class=" badge rounded-pill badge-soft-success">Resolvidos</p>
+										<h4 class=" text-center mb-0">{{ dashboard.resolvidos }}</h4>
+									</div>	
+								</div>							
+							</div>
+						</div>					
+					</div>
+				</div>
+			</div>			
+			<hr>
+			<div class="row g-3 mb-2">
+				<div class="col-sm-12 col-md-6 col-lg-6">
+					<a class="link-success box-hover d-block" href="{% url 'solicitation:make_request' %}">
+						<div class="card overflow-hidden" style="min-width: 12rem">
+							<div class="bg-holder bg-card" style="background-image:url({% static 'img/icons/spot-illustrations/corner-3.png' %});"></div>
+							<!--/.bg-holder-->
+							<div class="card-body position-relative">					
+
+								<div class="display-2 fs-2 fw-normal text-center font-sans-serif text-success" >Solicitar Chamado <i class="fas fa-plus-circle"> </i></div>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="col-sm-12 col-md-6 col-lg-6">
+					<a class="link-primary box-hover d-block" href="{% url 'solicitation:user_list_request' %}">
+						<div class="card overflow-hidden" style="min-width: 12rem">
+							<div class="bg-holder bg-card" style="background-image:url({% static 'img/icons/spot-illustrations/corner-2.png'%});"></div>
+							<!--/.bg-holder-->
+							<div class="card-body position-relative">
+
+								<div class="display-2 fs-2 fw-normal text-center font-sans-serif text-info" >Minhas Solicitações <i class="far fa-list-alt"> </i></div>
+							</div>
+						</div>
+					</a>
+				</div>						
+			</div>
+			<hr> 
+		</div>	
+	</div>
+	{% comment %} <div class="row">
+		<div class="col-xl-9 col-lg-9 col-md-8 col-sm-12 mb-2">
+			<p class="text-center fs-1 bg-light text-danger rounded fw-bold"> Novidades</p>
+			<div class="swiper-container theme-slider" data-swiper='{"autoplay":true,"spaceBetween":5,"loop":true,"loopedSlides":6,"slideToClickedSlide":true,"speed":4000}'>
+				<div class="swiper-wrapper">
+					{% for n in novidades %}
+						<div class="swiper-slide">
+							<div class="card mb-3">
+								<div class="bg-holder d-none d-lg-block bg-card" style="background-image:url({% static 'img/icons/spot-illustrations/corner-4.png' %});"></div>
+								<div class="card-body position-relative">
+									<div class="row">
+										<div class="col-lg-8">
+											<h4>{{ n.TituloBlog|upper }}</h4>
+											<a class="btn btn-link ps-0 btn-sm" href="{% url 'help_pages:blog_details' n.id n.SlugBlog|title %}" target="_blank">Ver <span class="fas fa-chevron-right ms-1 fs--2"></span>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+		<div class="col-xl-3 col-lg-3 col-md-4 col-sm-12 mb-4">
+			<p class="text-center fs-1 bg-light rounded fw-bold"> Acesso Rápido</p>
+			<div class="list-group fw-bold">
+				<a class="list-group-item text-primary box-hover list-group-item-action" href="#">
+					<div class="text-center">
+						<span>Tutorial de instalação do SIPL</span>	
+					</div>			
+				</a>
+				<a class="list-group-item box-hover list-group-item-action" href="#">
+					<div class="text-center">
+						<span>Arquivos do SIPL</span>	
+					</div>			
+				</a>
+				<a class="list-group-item box-hover list-group-item-action" href="#">
+					<div class="text-center">
+						<span>Ultilidades</span>	
+					</div>			
+				</a>
+			</div>
+		</div>
+	</div> {% endcomment %}
+{% endif %}
+	
+{% popup_notification %}
+{% block scripts %} 
+	{% if users_notification and not request.user.is_superuser %}
+		<script>
+			document.querySelector('#abremodal').click();
+		</script>
+	{% endif %}
+{% endblock scripts %}
+
+{% endblock content %}

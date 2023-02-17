@@ -1,0 +1,93 @@
+{% extends 'baselogin.html' %} 
+{% load static %} 
+{% block baselogin %} 
+
+
+{% if user.is_authenticated %} 
+
+<div class="container-fluid">
+	<div class="row min-vh-100 bg-100">
+		<div class="col-6 d-none d-lg-block position-relative">
+			<div class="bg-holder" style="background-image:url({% static 'img/generic/19.jpg' %});"></div>
+			<!--/.bg-holder-->
+		</div>
+		<div class="col-sm-10 col-md-6 px-sm-0 align-self-center mx-auto py-5">
+			<div class="row justify-content-center g-0">
+				<div class="col-lg-9 col-xl-8 col-xxl-6">
+					<div class="card">
+						<div class="card-header bg-circle-shape bg-shape text-center p-2"><a class="font-sans-serif fw-bolder fs-4 z-index-1 position-relative link-light light" >MikeBook</a></div>
+						<div class="card-body p-4">
+							<div class="text-center">
+								<img class="d-block mx-auto mb-4" src="{% static 'img/icons/spot-illustrations/45.png' %}" alt="shield" width="100">
+								<h3>Você já está logado como</h3>
+								<h2> {{ request.user.username }} </h2>
+								<p> Deseja sair e entrar com outro Usuário? <br> Você será Desconectado.</p>
+								<a class="btn btn-primary btn-sm mt-3" href=" {% url 'accounts:logout' %} ">
+									<span class="fas fa-chevron-left me-1" data-fa-transform="shrink-4 down-1"></span>Desconectar
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% else %} 
+
+
+<div class="container-fluid">
+	<div class="row min-vh-100 bg-100">
+		<div class="col-6 d-none d-lg-block position-relative">
+			<div class="bg-holder"  style="background-image:url({% static 'img/logos/DP.png' %});background-position: 50% 20%;"></div>
+			<!--/.bg-holder-->
+		</div>
+		<div class="col-sm-10 col-md-6 px-sm-0 align-self-center mx-auto py-5">
+			<div class="row justify-content-center g-0">
+				<div class="col-lg-9 col-xl-8 col-xxl-6"> 
+
+					{% if login_form.non_field_errors %}				
+						<div class="text-center rounded text-light bg-danger">{{login_form.non_field_errors}}</div>
+					{% endif %} 
+					
+				<div class="card">
+						<div class="card-header bg-circle-shape bg-shape text-center p-2">
+							<a class="font-sans-serif fw-bolder fs-4 z-index-1 position-relative link-light light">Diretoria de Pessoal</a>
+						</div>
+						<div class="card-body p-4">
+							<div class="row flex-between-center">
+								<div class="col-auto">
+									<h3 class="text-center">Login</h3>
+								</div>								
+							</div>
+							<form method="post"> 
+							{% csrf_token %} c
+							<div class="mb-3">
+									<label class="form-label">CPF</label>
+									<input class="form-control" required="True" name="username" >
+								</div>
+								<div class="mb-3">
+									<div class="d-flex justify-content-between">
+										<label class="form-label">Senha</label>
+									</div>
+									<input class="form-control" required="" name="password" type="password">
+								</div>
+								<div class="row flex-between-center">
+								</div>
+								<div class="mb-3">
+									<button class="btn btn-primary d-block w-100 mt-3" type="submit" name="btnauth" href=" {% url 'accounts:login' %} " name="submit">Log in</button>
+								</div>
+							</form>			
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div> 
+{% endif %} 
+
+
+</script>
+{% endblock baselogin %}

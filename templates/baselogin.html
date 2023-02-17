@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-br" dir="ltr">
+
+<header>
+    {% include 'partials/_header.html' %}
+    <title>
+        {% block title %}
+        {% endblock title %}
+    </title>
+</header>
+
+<body> 
+    <main class="main" id="top">
+        {% block baselogin %}
+
+        {% endblock baselogin %}               
+    </main>
+    {% include 'partials/js.html' %}
+
+</body>  

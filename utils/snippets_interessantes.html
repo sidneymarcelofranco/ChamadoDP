@@ -1,0 +1,29 @@
+MENSAGENS DE SUCESSO:
+from django.contrib import messages
+
+error_messages={'required': 'Please enter your skill','min_length':'very short entry','invalid':'Improper format'},        
+
+
+{% comment %} VIEW {% endcomment %}
+messages.success(
+    request,
+    f'Agora você é responsável pelo Chamado N° - {obj.id}'
+)
+{% comment %} TEMPLATE {% endcomment %}
+{% if messages %}
+	{% for message in messages%}
+		<div {% if message.tags %} class="alert {{ message.tags }} {% endif %} border-2 d-flex align-items-center" role="alert">
+			<p class="mb-0 fs-1 text-center flex-1">{{ message}}</p>
+			<button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+{% endif %}			
+
+
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+		<p class="mb-0 fs-1 text-center flex-1"> {{ error }} </p>
+        {% endfor %}
+    {% endfor %}
+{% endif %}

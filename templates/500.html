@@ -1,0 +1,29 @@
+{% extends 'baseerros.html' %} 
+{% load static %} 
+
+{% block content %} 
+<div class="row flex-center min-vh-100 py-6 text-center">
+	<div class="col-sm-10 col-md-8 col-lg-6 col-xxl-5">
+		<span class="d-flex flex-center mb-4">
+			<img class="me-2" src="{% static 'img/logos/DP.png' %}"  alt="" width="58">
+			<span class="font-sans-serif fw-bolder fs-6 d-inline-block">Chamado - DP</span>
+		</span>
+		<div class="card">
+			<div class="card-body p-4 p-sm-5">
+				<div class="fw-black lh-1 text-300 fs-error">500</div>
+				<p class="lead mt-4 text-800 font-sans-serif fw-semi-bold w-md-75 w-xl-100 mx-auto">O Conteúdo buscado, não exite ou não está disponível no momento.</p>
+				<hr>
+				<p>Tenha certeza que foi digitado o endereço correto, verifique a URL e os dados passados se o problema persistir 
+					<a href="mailto:dltic@policiamilitar.sp.gov.br">Entre em contato com a DP</a>. 
+				</p>					
+				<div class="text-end">
+					<a class="btn btn-primary  text-end" href=" {% url 'solicitation:index' %} ">
+						<span class="fas fa-home me-2"></span> Voltar </a>
+					</a>	
+				</div>				
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock content %}

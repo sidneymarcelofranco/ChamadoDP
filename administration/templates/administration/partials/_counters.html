@@ -1,0 +1,57 @@
+{% load static %}
+
+<div class="col-12">
+	<div class="card bg-transparent-50 overflow-hidden">
+		<div class="card-header position-relative">
+			<div class="bg-holder d-none d-md-block bg-card z-index-1" style="background-image:url({% static 'img/icons/spot-illustrations/corner-4.png'%});background-position:right bottom;z-index:-1;"></div>
+			<!--/.bg-holder-->
+			<div class="position-relative z-index-2">				
+				<div class="d-flex py-3">
+					<div class="row text-center fs-1">
+						<div class="col-md-2 m-2">
+							<p class="badge rounded-pill badge-soft-primary">Total Chamados</p>							
+								<h4 class="text-center mb-0">{{chamadostotal}}</h4>							
+						</div>
+						<div class="col-md-2 m-2">
+							<p class="badge rounded-pill badge-soft-danger">Total Histórico</p>							
+								<h4 class="text-center mb-0">{{fullcount}}</h4>							
+						</div>
+						<div class="col-md-2 m-2">
+							<p class="badge rounded-pill badge-soft-danger">Pendentes</p>
+							{% with pendentes.count as total_pendentes %}
+								<h4 class="text-center mb-0">{{total_pendentes}}</h4>
+							{% endwith %}
+						</div>
+						<div class="col-md-2 m-2">
+							<p class="badge rounded-pill badge-soft-warning">Em Análise</p>
+							{% with analise.count as total_analise %}
+								<h4 class="text-center mb-0">{{total_analise}}</h4>
+							{% endwith %}
+						</div>
+						<div class="col-md-2 m-2">
+							<p class="badge rounded-pill badge-soft-success">Resolvidos</p>
+							{% with resolvidos.count as total_resolvidos %}
+								<h4 class="text-center mb-0">{{total_resolvidos}}</h4>
+							{% endwith %}
+						</div>
+						<div class="col-md-2 m-2">
+							<p class="badge rounded-pill badge-soft-dark">Total de Acessos</p>							
+								<h4 class="text-center mb-0">{{acessos}}</h4>							
+						</div>
+						<div class="col-md-2 m-2">
+							<p class="badge rounded-pill badge-soft-info">Usuários</p>
+							{% with usuarios.count as total_usuarios %}
+								<h4 class="text-center mb-0">{{total_usuarios}}</h4>
+							{% endwith %}
+						</div>																	
+					</div>							
+				</div>
+				{% if request.META.HTTP_REFERER != None %}
+					<div class="text-end">
+						<a class="btn btn-falcon-primary btn-sm text-end" href="{{request.META.HTTP_REFERER}}">Voltar<a>	
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>

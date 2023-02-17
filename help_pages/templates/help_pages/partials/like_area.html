@@ -1,0 +1,85 @@
+    
+{% for dados in query %}					
+  <div class="card-header bg-soft-secondary text-end mt-4 shadow">    
+    <h5 class="mb-0" id="{{dados.CategoriaBlog.SlugCategoria|upper}}">         
+   
+      <div class=" mt-0 mb-0">        
+        <p class="fw-semi-bold fs-1 mt-0 mb-0 text-center " id="{{dados.SlugBlog|upper}}">
+          {{dados.TituloBlog}} 
+        {% for c in completo %}  
+          {% if c.Post_id == dados.id %}          
+            <span class="fas fa-check-circle text-success mt-0 mb-0 text-end fs-2"></span> 
+            <span class="fs--2 mb-0 mt-0">Visto: {{c.DataVisualizacao|date:"d/m/Y"}} </span>               
+          {% endif %} 
+        {% endfor %}
+        </p>
+        
+      </div>
+      <p class="fs--2 mt-0 mb-0 text-center ">
+        {{dados.CategoriaBlog.DescricaoCategoria}}
+      </p>
+    </h5>
+  </div>
+  
+  <div class="card-body bg-white rounded-bottom shadow">	   
+      <a  href="{% url 'help_pages:blog_details' dados.id dados.SlugBlog|title %}">
+        <h6 class="text-dark fw-bold mb-0">Assunto: <span class="text-primary fw-bold">{{dados.AssuntoBlog}}</span>
+        </h6>
+      </a>
+      <span class="text-dark mb-0 fs--1">Por: {{dados.AutorBlog.first_name}} {{dados.AutorBlog.last_name}} em {{dados.DataCriacao|date:"SHORT_DATE_FORMAT"}}</span>
+      <hr class="mb-2 mt-0">
+      <span class="mb-0 mt-1 text-center">{{dados.IntroducaoBlog|safe}}</span>	      
+  
+      <div class="row bg-light">
+        <div class="col-4" id="tags">       
+          {% for tag in dados.TagsBlog.all %}
+            {% if dados.CategoriaBlog.TipoBlog.id == 1 %}       
+              <span class="badge badge-soft-warning fs--2 mt-0"> <i class="fas fa-tag"></i> {{tag.name}}</span>
+            {% elif dados.CategoriaBlog.TipoBlog.id == 2 %}       
+              <span class="badge badge-soft-secondary fs--2 mt-0"> <i class="fas fa-tag"></i> {{tag.name}}</span>
+            {% elif dados.CategoriaBlog.TipoBlog.id == 3 %}       
+              <span class="badge badge-soft-primary fs--2 mt-0"> <i class="fas fa-tag"></i> {{tag.name}}</span>
+            {% endif %} 
+          {% endfor %}
+        </div>
+        <div class="col-4 text-center align-self-center">
+          <span class=" p-0 text-primary fw-bold fs-0">
+            {{dados.ViewCount}} Visualizações
+          </span>
+          <button 
+            class=" bg-light border-0 p-0 text-primary ms-2 fa-bounce" 
+            hx-post="{% url 'help_pages:like' dados.id dados.SlugBlog|title %}"  
+            hx-target="#likesarea" 
+            type="submit">
+            <i class="far fa-thumbs-up"></i>
+            {{dados.num_likes}} Bilagens
+          </button>
+        </div>
+        <div class="col-4 text-end align-self-center ">      
+          <a class="btn btn-outline-primary rounded-pill btn-sm p-1 ms-2" type="button" href="{% url 'help_pages:blog_details' dados.id dados.SlugBlog|title %}">
+            <i class="far fa-eye"></i>
+            Ver post
+          </a>
+          {% if request.user.is_staff == True %}
+            <a class="btn p-0 text-primary ms-2" href="{% url 'help_pages:blog_update' dados.SlugBlog|title %}">Editar</a>	
+          {% endif %}	
+        </div>
+      </div> 
+    </div> 
+  
+
+  <input class="form-control text-light" type="text" hidden value="{{dados.CategoriaBlog.TipoBlog}}" id="tipoBlog" name="tipoBlog"></input>
+
+{% empty%}
+
+  <h3 class="text-center m-1 p-1 rounded badge-soft-danger fw-bold">Nenhum conteúdo adicionado até o momento.</h3>
+  <h4 class="text-center m-1 p-1 fw-semi-bold">     
+    Se você tiver algum pedido, dúvida ou sugestão,
+    fique a vontade para nos enviar via chamado, 
+    e postaremos o seu conteúdo assim que possível.
+    <div class="text-center mt-3">
+      <a class="btn btn-falcon-success btn-lg" href="{% url 'solicitation:make_request' %}" >Realizar Chamado</a>
+    </div>
+  </h4>
+
+{% endfor %}

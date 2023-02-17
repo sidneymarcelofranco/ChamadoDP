@@ -1,0 +1,35 @@
+    <h6 class="text-dark">Por: <b>{{details.AutorBlog.first_name}} {{details.AutorBlog.last_name}}</b> em {{details.DataCriacao|date:"SHORT_DATE_FORMAT"}}</h6>	    
+    <p class="mb-0">{{details.IntroducaoBlog|safe}}</p>	
+    <p class="mb-0 ">{{details.DescricaoBlog|safe}}</p>	
+
+    <div class="row bg-light">
+        <div class="col-4" id="tags">       
+          {% for tag in details.TagsBlog.all %}
+            {% if details.CategoriaBlog.TipoBlog.id == 1 %}       
+              <span class="badge badge-soft-warning fs--2 mt-0"> <i class="fas fa-tag"></i> {{tag.name}}</span>
+            {% elif details.CategoriaBlog.TipoBlog.id == 2 %}       
+              <span class="badge badge-soft-secondary fs--2 mt-0"> <i class="fas fa-tag"></i> {{tag.name}}</span>
+            {% elif details.CategoriaBlog.TipoBlog.id == 3 %}       
+              <span class="badge badge-soft-primary fs--2 mt-0"> <i class="fas fa-tag"></i> {{tag.name}}</span>
+            {% endif %} 
+          {% endfor %}
+        </div>
+        <div class="col-4 text-center align-self-center">
+          <span class=" p-0 text-primary fw-bold fs-0">
+            {{details.ViewCount}} Visualizações
+          </span>
+          <button 
+            class=" bg-light border-0 p-0 text-primary ms-2 fa-bounce" 
+            hx-post="{% url 'help_pages:like_details' details.id details.SlugBlog|title %}"  
+            hx-target="#like_details" 
+            type="submit">
+            <i class="far fa-thumbs-up"></i>
+            {{details.num_likes}} Bilagens
+          </button>
+        </div>
+        <div class="col-4 text-end align-self-center "> 
+          {% if request.user.is_staff == True %}
+            <a class="btn p-0 text-primary ms-2" href="{% url 'help_pages:blog_update' details.SlugBlog|title %}">Editar</a>	
+          {% endif %}	
+        </div>
+      </div> 

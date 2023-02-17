@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}
+    Chamado | {{details.TituloBlog|upper}}
+{% endblock title %}
+{% load static %} 
+{% block content %} 
+{% load _popup_notification %}
+
+<div class="card mb-3 text-center">
+    <div class="bg-holder d-none d-md-block bg-card z-index-1" style="background-image:url({% static 'img/icons/spot-illustrations/corner-5.png'%});background-position:right bottom;z-index:-1;"></div>
+	<!--/.bg-holder-->
+	<div class="card-body position-relative">
+		<div class="row">
+			<div class="col-lg-12">
+				<h2 class="text-secondary">{{details.TituloBlog|upper}}</h2>
+					<p class="mb-0">
+              {{details.CategoriaBlog|upper}} - 
+              {{details.AssuntoBlog|upper}}						
+					</p>					
+			</div>
+		</div>
+	</div>
+</div>  
+
+<div class="row g-0 bg-white rounded">
+	<div class="col-xxl-12 col-lg-12 col-md-12 col-sm-12 pe-lg-12">
+      <div class="card-body">	               
+       <div id="like_details">
+        {% include 'help_pages/partials/_like_details.html' %}
+      </div>
+      </div>
+	</div>
+</div>
+
+<div class="row mt-4 text-center">
+  {% if request.META.HTTP_REFERER != None %}
+  <div class="text-end">
+    <a class="btn btn-falcon-primary btn-sm text-end" href="{{request.META.HTTP_REFERER}}">Voltar</a>	
+  </div>
+{% endif %}
+</div>
+
+
+{% popup_notification %}
+{% block scripts %} 
+	{% if users_notification and not request.user.is_superuser %}
+		<script>
+			document.querySelector('#abremodal').click();
+		</script>
+	{% endif %}
+{% endblock scripts %}
+{% endblock content %}

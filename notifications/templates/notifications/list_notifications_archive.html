@@ -1,0 +1,53 @@
+<div id="list_partial">
+<p>
+  <h4 class="text-center">Arquivadas</h4>
+</p>
+
+  <div class="card overflow-hidden mb-3">
+    <div class="card-header bg-light" >
+      <div class="row flex-between-center">
+        <div class="col-6 text-start mt-0">
+          <a class="btn btn-falcon-primary btn-sm font-sans-serif fs--2" href="{% url 'notifications:list_notifications' %}">Ver Todas Notificações</a>
+
+          <h6 class="mb-1 mb-md-0 mt-2">
+            Notificações - {{notifications.total_notification}} | 
+            <strong class="text-danger">{{notifications.unchecked}} Não Lidas</strong> |
+            <a href="{% url 'notifications:list_notifications_archive' %}">
+              <strong class="text-warning">{{notifications.archived}} Arquivadas</strong> </a>
+          </h6>
+        </div>
+          <div class="col-6 fs--2 text-end">
+            {% if notifications.total_notification != 0%}
+              {% if notifications.archived >= 1 %}
+                <a class="btn btn-falcon-info btn-sm font-sans-serif ms-2 fs--2 mt-1" 
+                hx-post="{% url 'notifications:mark_all_unarchive' %}"
+                hx-target="#list_partial">
+                Desarquivar todas</a>
+              
+              <a class="btn btn-falcon-danger btn-sm font-sans-serif ms-2 fs--2 mt-1" 
+                data-bs-toggle="collapse" data-bs-target="#delete" 
+                aria-expanded="false" aria-controls="collapseExample">
+                Deletar Arquivadas
+              </a>
+              <div class="collapse text-end  mt-2" id="delete">
+                <span class="fs--2 fw-bold text-danger">
+                  Esta ação não poderá ser desfeita. Todas notificações <strong>Arquivadas</strong> serão Excluídas!</span> 
+                <a class="font-sans-serif ms-2 ms-sm-3 text-success" 
+                hx-post="{% url 'notifications:delete_all_archive' %}"
+                type="button"  
+                hx-target="#list_partial">                 
+                Confirmar</a>														
+              </div> 
+              {% endif %}
+              {% else %}
+            {% endif %}          
+          </div>        
+      </div>
+    </div>
+  
+    {% include 'notifications/partials/_list_notifications_archive.html' %}
+
+  </div>
+</div>
+
+

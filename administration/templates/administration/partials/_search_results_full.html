@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% block title %}
+    Chamado | Resultados
+{% endblock title %}
+{% load static %}
+{% load search_highlighter %}
+
+{% block content %} 
+        <h3>
+            <span class="badge badge-soft-primary">{{ totalpluspolicia }}</span> 
+            Resultados Encontrados
+        </h3>
+        {% if full_search %}
+        <h5>Termo buscado: {{full_search}}</h5>
+        {% else %}
+        {% endif %}        
+        {% if messages %}     
+            {% for message in messages%}
+                <div {% if message.tags %} class="alert {{ message.tags }} {% endif %} border-2 d-flex align-items-center" role="alert">
+                    <p class="mb-0 fs-1 text-center flex-1">{{ message}}</p>
+                    <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}	
+        <hr>
+        <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false"> 
+                    <span class="fs-1">
+                        Policial Militar <span class="badge bg-primary">1</span>
+                    </span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false"> 
+                    <span class="fs-1">
+                        Chamados <span class="badge bg-primary">{{ total }}</span>
+                    </span>
+                </button>
+            </li>            
+        </ul>    
+        <div class="tab-content" id="myTabContent">
+            {% comment %} ABA POLICIAL {% endcomment %}
+            <div class="show active tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                <div class="row mt-4 ">
+                    <div class="col-3">
+                        <center>
+                        <div class="card bg-light {% if jsonresponse.funcao == 'Inativo' %}border border-danger border-2{% endif %}">
+                            <div class="card-body">
+                                {% if jsonresponse.foto == None %}
+                                    <img class="rounded-circle border" src="{% static 'img/logos/profile.png' %}" style="width: 130px;"/>
+                                {% else %}
+                                    <img class="rounded-circle border" src="data:image/png;base64,{{ jsonresponse.foto }}"  alt="{{ jsonresponse.nomeguerra }}" />
+                                {% endif %}
+                                <hr>
+                                <div>
+                                    <p class="fw-bold m-0 p-0"> {{ jsonresponse.postoo }}</p>
+                                    <p class="fw-bold fs-1">{{ jsonresponse.nomeguerra }}</p>
+                                    <p class="m-0 p-0">
+                                        RE - <span class="fw-bold">{{ jsonresponse.re }}</span>
+                                    </p>
+                                    <p>
+                                        CPF - <span class="fw-bold">{{ jsonresponse.cpf }}-{{ jsonresponse.dig }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        </center>
+                    </div>
+                    <div class="col-9">
+                        <div class="card bg-light {% if jsonresponse.funcao == 'Inativo' %}border border-danger border-2{% endif %}">
+                            <div class="card-body">
+                                <div class="card-header">
+                                    <div class="row align-items-center">
+                                        <div class="col text-center">
+                                            <h4 class="mb-0">Dados da Unidade</h4>
+                                        </div>                                        
+                                    </div>
+                                </div>
+                                <div class="card-body bg-light border-top">
+                                    <div class="row">                                       
+                                        <div class="col-lg">                                            
+                                            <div class="row">
+                                                <div class="col-5 col-sm-4">
+                                                    <p class="fw-semi-bold mb-1">Código da OPM</p>
+                                                </div>
+                                                <div class="col fw-bold">{{ jsonresponse.opmcod }}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-5 col-sm-4">
+                                                    <p class="fw-semi-bold mb-1">Grande Comando</p>
+                                                </div>
+                                                <div class="col fw-bold">{{ jsonresponse.opmco1 }}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-5 col-sm-4">
+                                                    <p class="fw-semi-bold mb-1">Unidade</p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fw-bold mb-1">{{ jsonresponse.opmco2 }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-5 col-sm-4">
+                                                    <p class="fw-semi-bold mb-1">Cia / Batalhão</p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fw-bold mb-1">{{ jsonresponse.opmco3 }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-5 col-sm-4">
+                                                    <p class="fw-semi-bold mb-0">Seção / Pelotão</p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fw-bold mb-0">{{ jsonresponse.opmco4 }}</p>
+                                                </div>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                </div>
+                                <div class="card-footer border-top pb-0">
+                                    <span class="fw-bold">Email:</span> {{ jsonresponse.emailpm }}
+                                    <span class="float-end">
+                                        {% if jsonresponse.funcao == 'Inativo' %}
+                                        <span class="text-danger fw-bold fs-2">{{ jsonresponse.funcao }}</span>
+                                        {% else %}
+                                        <span class="fw-bold">Função: </span>{{ jsonresponse.funcao }}
+                                        {% endif %}
+                                    </span> 
+                                </div>                           
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+            {% comment %} END ABA POLICIAL {% endcomment %}
+            <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+                <div class="list-group mt-2">
+                    {% for c in chamado_results %}
+                        <a class="list-group-item list-group-item-action flex-column align-items-start light" 
+                        href="{% url 'administration:admin_update_request' c.id %}" target="_blank">
+                            <div class="d-flex flex-column flex-sm-row justify-content-between mb-1 mb-md-0">
+                                <h5>Chamado N° {{ c.id }} | {{ c.TituloDaSolicitacao|highlight_search:full_search }}</h5>
+                                <small>{{ c.DataDaSolicitacao }}</small>
+                            </div>
+                            {{ c.DescricaoDoChamado|safe|truncatechars:100 }}
+                            <center>
+                                <small><span class="fw-bold">Categoria:</span> {{ c.CategoriaDaSolicitacao }}</small> |
+                                <small><span class="fw-bold">Solicitante: </span>{{ c.PostoGradSolicitante }} {{ c.ReSolicitante }} {{ c.NomeGuerraSolicitante }}</small> |
+                                <small><span class="fw-bold">Responsável: </span>{{ c.Responsavel.first_name }} {{ c.Responsavel.last_name }}</small> |
+                                
+                                {% if c.StatusAtual_id == 1 %}
+                                    <small><span class="fw-bold badge bg-danger fw-bold">PENDENTE</span></small>
+                                    {% elif c.StatusAtual_id == 2 %}
+                                    <small><span class="fw-bold badge bg-warning fw-bold">EM ANÁLISE</span></small>
+                                    {% elif c.StatusAtual_id == 3 %}
+                                    <small><span class="fw-bold badge bg-success fw-bold">RESOLVIDO</span></small>
+                                    {% elif  c.StatusAtual_id == 4 %}
+                                    <small><span class="fw-bold badge bg-info fw-bold">RESOLVIDO E FECHADO</span></small>
+                                    {% elif c.StatusAtual_id == 5 %}
+                                    <small><span class="fw-bold badge bg-secondary fw-bold">REABERTO</span></small>
+                                    {% else %}
+                                {% endif %}  
+                                
+                            </center>
+                        </a>
+                    {% empty %}
+                        <h3 class="mt-4 text-center">
+                            Nenhum Resultado para <span class="fw-bold" style="background-color: yellow;">{{ full_search }}</span> Encontrado
+                        </h3>
+                    {% endfor %}
+                </div>                
+                
+                    
+                
+            </div>            
+        </div>
+
+
+{% endblock content %}

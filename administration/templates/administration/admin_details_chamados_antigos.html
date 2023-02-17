@@ -1,0 +1,153 @@
+{% extends 'base.html' %} 
+{% block title %}
+    Chamado | Antigos
+{% endblock title %}
+{% load static %} 
+{% block content %} 
+
+
+<div class="col-12">
+	<div class="card bg-transparent-50 overflow-hidden">
+		<div class="card-header position-relative">
+			<div class="bg-holder d-none d-md-block bg-card z-index-1" style="background-image:url({% static 'img/icons/spot-illustrations/corner-4.png'%});background-position:right bottom;z-index:-1;"></div>
+			<!--/.bg-holder-->
+			<div class="position-relative z-index-2">
+				<div>
+					<h3 class="text-primary mb-1 text-center">
+						Diretoria de Pessoal - Seção de Suporte
+					</h3>					
+					</p>
+				</div>
+				{% if request.META.HTTP_REFERER != None %}
+					<div class="text-end">
+						<a class="btn btn-falcon-primary btn-sm text-end" href="{{request.META.HTTP_REFERER}}">Voltar</a>	
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+<hr>
+
+<div class="card mb-3 ">
+	<div class="card bg-transparent-50 overflow-hidden">
+		<div class="card-header position-relative">
+			<div class="bg-holder d-none d-md-block bg-card z-index-1" style="background-image:url({% static 'img/icons/spot-illustrations/corner-2.png'%});background-position:right bottom;z-index:-1;"></div>
+			<!--/.bg-holder-->
+			<div class="position-relative z-index-2">
+				<div class="card-body">
+					<div class="row align-items-center text-center mb-3">
+						<div class="col-sm-6 text-sm-start">
+							<img src=" {% static 'img/logos/DP.png' %} " alt="invoice" width="150">
+						</div>
+						<div class="col text-sm-end mt-3 mt-sm-0">
+							<h2 class="mb-3">Solicitação de Chamados</h2>
+							<h5>Diretoria de Pessoal</h5>
+							<p class="fs--1 mb-0">Avenida Cruzeiro do Sul, 260 <br>Canindé, São Paulo </p>
+							<p class="fs--1">
+								<a href="mailto:dltic@policiamilitar.sp.gov.br">dltic@policiamilitar.sp.gov.br</a>
+								<br>
+								<a href="tel:+1133277797">(11) 3327-7797 </a>
+							</p>	
+						</div>
+						<div class="col-12">
+							<hr>
+						</div>
+					</div>
+					<div class="card-title">
+						<h5 class="mb-3 fs-4 ">Dados do Solicitante  <i class="far fa-user-circle"></i></h5>
+						<div class="row align-items-center text-center">
+							<div class="col-sm-6 fs-2 text-sm-start">
+								<span class="fw-bold">Solicitante: </span> {{ details.nome }}
+								<br>
+								<span class="fw-bold">RE:  </span>{{ details.re_ch }}						
+								<br>					
+							</div>	
+
+							<div class="col text-sm-end fs-2 mt-sm-0">	
+								{% if details.situacao == 'resolvido' %}
+									STATUS DO CHAMADO: 
+								<h6 class="badge badge-soft-success fs-2 ">																		
+									{{details.situacao}}										
+								<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span>
+								</h6>
+								<br>
+								{% elif details.situacao == 'pendente'%} 
+										STATUS DO CHAMADO:
+									<h6 class="badge badge-soft-danger fs-2 ">										
+										{{details.situacao}}										
+									<span class="ms-1 fas fa-minus" data-fa-transform="shrink-2"></span>
+									</h6>
+									<br>
+								{% endif %}	
+								
+								<span class="fw-bold">Unidade:  </span>{{ details.unidade }}
+								<br>
+								<span class="fw-bold">OPM COD:  </span>{{ details.OPM }}
+								<br>							
+							</div>			
+						</div>
+					</div>
+					<div class="card-title">
+						<div class="">
+							<h5 class="mb-1 mt-4 fs-4">Dados do Chamado Número {{ details.id }} 
+								<i class="far fa-list-alt"></i> 
+							</h5>	
+							<label class="form-label text-primary fs-1">Data da Solicitação:</label>
+							<label class="form-label fs-1">{{ details.data_sol }}</label>				
+						</div>		
+						
+
+						<div class="col-12">
+							<p class="fw-bold text-center fs-2 text-dark">Descrição do Chamado:</p>
+							<p class="fs-1">{{ details.problema|safe|linebreaks }}</p>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col-12">
+								<p class="fw-bold text-center fs-2 text-dark">Dados do Atendimento:</p>						
+							</div>
+
+							<div class="col-6 text-center">
+								<label class="form-label text-dark fs-1">PM Responsável:</label>
+								<p class="form-label fs-1">{{ details.PM_res }}</p>				
+							</div>					
+							<div class="col-6 text-center">
+								<label class="form-label text-success fs-1">Data da Resolução:</label>
+								<p class="form-label fs-1">{{ details.data_res }}</p>				
+							</div>
+							
+							<div class="col-12 mt-3">
+								<label class="form-label text-primary fs-1">Resposta do Chamado:</label>
+								<p class="form-label fs-1">{{ details.obs|safe|linebreaks }}</p>				
+							</div>					
+						</div>
+						<hr>
+						{% if details.PM_atu == None %}
+						<div class="row">
+							<div class="col-12">
+								<p class="fw-bold text-center fs-2 text-dark">Dados de Atualização:</p>						
+							</div>
+
+							<div class="col-6 text-center">
+								<label class="form-label text-dark fs-1">PM Responsável:</label>
+								<p class="form-label fs-1">{{ details.PM_atu }}</p>				
+							</div>					
+							<div class="col-6 text-center">
+								<label class="form-label text-warning fs-1">Data da Atualização:</label>
+								<p class="form-label fs-1">{{ details.data_atu }}</p>				
+							</div>			
+						</div>
+						<hr>
+						{% endif %}
+					</div> 			
+				</div>  
+			</div>  
+		</div>  
+	</div>  
+</div> 
+ 
+
+
+
+{% endblock content %}

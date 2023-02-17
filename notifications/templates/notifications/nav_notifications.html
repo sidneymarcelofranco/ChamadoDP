@@ -1,0 +1,346 @@
+{% if notifications.to_user == request.user%}
+    <li class="nav-item dropdown" id="tag_cloud">
+        {% if users_notification == 0%}
+            <a class="nav-link px-0 text-success notification-indicator-fill fa-icon-wait" id="navbarDropdownNotification" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="fas fa-bell" data-fa-transform="shrink-6" style="font-size: 33px;"></span>        
+            </a>
+        {% else %}
+            <a class="nav-link px-0 notification-indicator fa-bounce notification-indicator-danger notification-indicator-fill fa-icon-wait" id="navbarDropdownNotification" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="fas fa-bell" data-fa-transform="shrink-6" style="font-size: 33px;"></span>
+                <span class="notification-indicator-number ">{{users_notification}}</span>
+            </a>
+        {% endif %}
+
+        <div class="dropdown-menu dropdown-menu-end dropdown-menu-card dropdown-menu-notification" aria-labelledby="navbarDropdownNotification">
+            <div class="card card-notification shadow-none">
+                <div class="card-header">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-auto">
+                            <h6 class="card-header-title mb-0">Notificações</h6>
+                        </div>
+                        {% if users_notification != 0%}
+                        <div class="col-auto ps-0 ps-sm-3">
+                            <a class="card-link fs--2 fw-normal" href="{% url 'notifications:mark_all_read' %}">Marcar todas como Lidas</a>
+                        </div>
+                        {% endif %}
+                    </div>            
+                </div>
+                
+                {% if users_notification == 0%} 
+                <div class="scrollbar-overlay os-host os-theme-dark os-host-resize-disabled os-host-scrollbar-horizontal-hidden os-host-transition os-host-overflow os-host-overflow-y" style="max-height:4rem">
+                {% else %}            
+                <div class="scrollbar-overlay os-host os-theme-dark os-host-resize-disabled os-host-scrollbar-horizontal-hidden os-host-transition os-host-overflow os-host-overflow-y" style="height:{{counts}}rem; max-height:35rem">
+                {% endif %}
+                    <div class="os-resize-observer-host observed">
+                        <div class="os-resize-observer" style="left: 0px; right: auto;"></div>
+                    </div>
+                    <div class="os-size-auto-observer observed" style="height: calc(100% + 1px); float: left;">
+                        <div class="os-resize-observer"></div>
+                    </div>
+                    <div class="os-content-glue" style="margin: 0px; height: 515px; width: 317px;"></div>
+                    <div class="os-padding">
+                        <div class="os-viewport os-viewport-native-scrollbars-invisible" style="overflow-y: scroll;">
+                            <div class="os-content" style="padding: 0px; height: auto; width: 100%;">
+                                <div class="list-group list-group-flush fw-normal fs--1"> 
+                                    {% for notification in notifications %} 
+                                        {% if notification.TipoNotificacao_id == 1%} 
+                                            <div class="list-group-item ">
+                                                <a class="notification notification-flush notification-unread" href="{% url 'notifications:post-notification' notification.id notification.Solicitacao.id %}">
+                                                    <div class="notification-body">
+                                                        <p class="mb-1">
+                                                            <strong>{{notification.from_user.first_name}} {{notification.from_user.last_name}}</strong>
+                                                            {{notification.TipoNotificacao|upper}}!
+                                                        </p>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <span class="notification-time fs--2">
+                                                                    <span class="me-2 far fa-clock text-secondary">
+                                                                    </span>
+                                                                    {{notification.whenpublished}}
+                                                                </span>
+                                                            </div>
+                                                            <div class="col-6 text-end">
+                                                                <span class="badge bg-success ">Novo!</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div> 
+                                        {% elif notification.TipoNotificacao_id == 2 %} 
+                                            <div class="list-group-item ">
+                                                <a class="notification notification-flush notification-unread" href="{% url 'notifications:post-notification' notification.id notification.Solicitacao.id %}">
+                                                    <div class="notification-body">
+                                                        <p class="mb-1">
+                                                            <strong>{{notification.from_user.first_name}} {{notification.from_user.last_name}}</strong>
+                                                            {{notification.TipoNotificacao|upper}}!
+                                                        </p>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <span class="notification-time fs--2">
+                                                                    <span class="me-2 far fa-clock text-secondary"></span>{{notification.whenpublished}} </span>
+                                                            </div>
+                                                            <div class="col-6 text-end">
+                                                                <span class="badge bg-warning ">Em Análise!</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>                                     
+                                        {% elif notification.TipoNotificacao_id == 3%} 
+                                            <div class="list-group-item ">
+                                                <a class="notification notification-flush notification-unread" href="{% url 'notifications:post-notification' notification.id notification.Solicitacao.id %}">
+                                                    <div class="notification-body">
+                                                        <p class="mb-1">
+                                                            <strong>{{notification.from_user.first_name}} {{notification.from_user.last_name}}</strong>
+                                                            {{notification.TipoNotificacao|upper}}!
+                                                        </p>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <span class="notification-time fs--2">
+                                                                    <span class="me-2 far fa-clock text-secondary"></span>{{notification.whenpublished}} </span>
+                                                            </div>
+                                                            <div class="col-6 text-end">
+                                                                <span class="badge bg-danger ">Voltou para Pendência!</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div> 
+                                        {% elif notification.TipoNotificacao_id == 4%} 
+                                            <div class="list-group-item ">
+                                                <a class="notification notification-flush notification-unread" href="{% url 'notifications:post-notification' notification.id notification.Solicitacao.id %}">
+                                                    <div class="notification-body">
+                                                        <p class="mb-1">
+                                                            <strong>{{notification.from_user.first_name}} {{notification.from_user.last_name}}</strong>
+                                                            {{notification.TipoNotificacao|upper}}!
+                                                        </p>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <span class="notification-time fs--2">
+                                                                    <span class="me-2 far fa-clock text-secondary"></span>{{notification.whenpublished}} </span>
+                                                            </div>
+                                                            <div class="col-6 text-end">
+                                                                <span class="badge bg-primary ">Fechado!</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div> 
+                                        {% elif notification.TipoNotificacao_id == 5%} 
+                                            <div class="list-group-item ">
+                                                <a class="notification notification-flush notification-unread" href="{% url 'notifications:post-notification' notification.id notification.Solicitacao.id %}">
+                                                    <div class="notification-body">
+                                                        <p class="mb-1">
+                                                            <strong>{{notification.from_user.first_name}} {{notification.from_user.last_name}}</strong>
+                                                            {{notification.TipoNotificacao|upper}}!
+                                                        </p>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <span class="notification-time fs--2">
+                                                                    <span class="me-2 far fa-clock text-secondary"></span>{{notification.whenpublished}} </span>
+                                                            </div>
+                                                            <div class="col-6 text-end">
+                                                                <span class="badge bg-success ">Resolvido!</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        {% elif notification.TipoNotificacao_id == 6%} 
+                                            <div class="list-group-item ">
+                                                <a class="notification notification-flush notification-unread" href="{% url 'notifications:post-notification' notification.id notification.Solicitacao.id %}">
+                                                    <div class="notification-body">
+                                                        <p class="mb-1">
+                                                            <strong>{{notification.from_user.first_name}} {{notification.from_user.last_name}}</strong>
+                                                            {{notification.TipoNotificacao|upper}}!
+                                                        </p>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <span class="notification-time fs--2">
+                                                                    <span class="me-2 far fa-clock text-secondary"></span>{{notification.whenpublished}} </span>
+                                                            </div>
+                                                            <div class="col-6 text-end">
+                                                                <span class="badge bg-primary ">Reaberto!</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>                                     
+                                        {% elif notification.TipoNotificacao_id == 7%} 
+                                            <div class="list-group-item ">
+                                                <a class="notification notification-flush notification-unread" href="{% url 'notifications:post-notification' notification.id notification.Solicitacao.id %}">
+                                                    <div class="notification-body">
+                                                        <p class="mb-1">
+                                                            <strong>{{notification.from_user.first_name}} {{notification.from_user.last_name}}</strong>
+                                                            {{notification.TipoNotificacao|upper}}!
+                                                        </p>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <span class="notification-time fs--2">
+                                                                    <span class="me-2 far fa-clock text-secondary"></span>{{notification.whenpublished}} </span>
+                                                            </div>
+                                                            <div class="col-6 text-end">
+                                                                <span class="badge bg-dark ">Resposta!</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        {% elif notification.TipoNotificacao_id == 8%} 
+                                            <div class="list-group-item ">
+                                                <a class="notification notification-flush notification-unread" href="{% url 'notifications:post-notification' notification.id notification.Solicitacao.id %}">
+                                                    <div class="notification-body">
+                                                        <p class="mb-1">
+                                                            <strong>{{notification.from_user.first_name}} {{notification.from_user.last_name}}</strong>
+                                                            {{notification.TipoNotificacao|upper}}!
+                                                        </p>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <span class="notification-time fs--2">
+                                                                    <span class="me-2 far fa-clock text-secondary"></span>{{notification.whenpublished}} </span>
+                                                            </div>
+                                                            <div class="col-6 text-end">
+                                                                <span class="badge bg-dark ">Comentário!</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div> 
+                                        {% elif notification.TipoNotificacao_id == 9%} 
+                                            <div class="list-group-item ">
+                                                <a class="notification notification-flush notification-unread" href="{% url 'help_pages:blog-notification' notification.pk  notification.BlogPost.SlugBlog|title %}">
+                                                    <div class="notification-body">
+                                                        <p class="mb-1">
+                                                            <strong>{{notification.from_user.first_name}} {{notification.from_user.last_name}}</strong>
+                                                            {{notification.TipoNotificacao|upper}}
+                                                            {{notification.BlogPost.CategoriaBlog}}
+                                                        </p>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <span class="notification-time fs--2">
+                                                                    <span class="me-2 far fa-clock text-secondary"></span>{{notification.whenpublished}} </span>
+                                                            </div>
+                                                            <div class="col-6 text-end">
+                                                                <span class="badge rounded-pill badge-soft-dark">{{notification.BlogPost.CategoriaBlog.TipoBlog}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div> 
+                                            {% elif notification.TipoNotificacao_id == 10%} 
+                                            <div class="list-group-item ">
+                                                <a class="notification notification-flush notification-unread" href="{% url 'notifications:post-notification' notification.id notification.Solicitacao.id %}">
+                                                    <div class="notification-body">
+                                                        <p class="mb-1">
+                                                            <strong>{{notification.from_user.first_name}} {{notification.from_user.last_name}}</strong>
+                                                            {{notification.TipoNotificacao|upper}}!
+                                                        </p>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <span class="notification-time fs--2">
+                                                                    <span class="me-2 far fa-clock text-secondary"></span>{{notification.whenpublished}} </span>
+                                                            </div>
+                                                            <div class="col-6 text-end">
+                                                                <span class="badge bg-success ">Finalizado!</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            {% elif notification.TipoNotificacao_id == 11%} 
+                                            <div class="list-group-item ">
+                                                <a class="notification notification-flush notification-unread" href="{% url 'accounts:user-notification' notification.id notification.NovoUser.id %}">
+                                                    <div class="notification-body">
+                                                        <p class="mb-1">
+                                                            <strong>{{notification.from_user.first_name}} {{notification.from_user.last_name}}</strong>
+                                                            {{notification.TipoNotificacao|upper}}!
+                                                        </p>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <span class="notification-time fs--2">
+                                                                    <span class="me-2 far fa-clock text-secondary"></span>{{notification.whenpublished}} </span>
+                                                            </div>
+                                                            <div class="col-6 text-end">
+                                                                <span class="badge bg-success ">NOVO USUÁRIO!</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            {% elif notification.TipoNotificacao_id == 12%} 
+                                            <div class="list-group-item ">
+                                                <a class="notification notification-flush notification-unread" href="{% url 'help_pages:blog-notification' notification.pk  notification.BlogPost.SlugBlog|title %}">
+                                                    <div class="notification-body">
+                                                        <p class="mb-1">
+                                                            <strong>{{notification.from_user.first_name}} {{notification.from_user.last_name}}</strong>
+                                                            {{notification.TipoNotificacao|upper}}
+                                                            {{notification.BlogPost.CategoriaBlog}}
+                                                        </p>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <span class="notification-time fs--2">
+                                                                    <span class="me-2 far fa-clock text-secondary"></span>{{notification.whenpublished}} </span>
+                                                            </div>
+                                                            <div class="col-6 text-end">
+                                                                <span class="badge rounded-pill badge-soft-dark">{{notification.BlogPost.CategoriaBlog.TipoBlog}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            {% elif notification.TipoNotificacao_id == 13%} 
+                                            <div class="list-group-item ">
+                                                <a class="notification notification-flush notification-unread" href="{% url 'notifications:post-notification' notification.id notification.Solicitacao.id %}">
+                                                    <div class="notification-body">
+                                                        <p class="mb-1">
+                                                            <strong>{{notification.from_user.first_name}} {{notification.from_user.last_name}}</strong>
+                                                            {{notification.TipoNotificacao|upper}}!
+                                                        </p>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <span class="notification-time fs--2">
+                                                                    <span class="me-2 far fa-clock text-secondary"></span>{{notification.whenpublished}} </span>
+                                                            </div>
+                                                            <div class="col-6 text-end">
+                                                                <span class="badge bg-success ">Visualizado!</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>  
+                                        {% endif %}
+                                        {% empty %} 
+                                            <div class="list-group-item align-self-center">
+                                                <a class="notification notification-flush notification-unread">
+                                                    <div class="notification-body align-self-center">
+                                                        <p class="mb-1 fs-1">
+                                                            <strong class="">Não há novas Notificações</strong>
+                                                        </p>
+                                                    </div>
+                                                </a> 
+                                            </div> 
+
+                                    {% endfor %} 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="os-scrollbar os-scrollbar-horizontal os-scrollbar-unusable os-scrollbar-auto-hidden">
+                        <div class="os-scrollbar-track os-scrollbar-track-off">
+                            <div class="os-scrollbar-handle" style="transform: translate(0px, 0px); width: 100%;"></div>
+                        </div>
+                    </div>
+                    <div class="os-scrollbar os-scrollbar-vertical os-scrollbar-auto-hidden">
+                        <div class="os-scrollbar-track os-scrollbar-track-off">
+                            <div class="os-scrollbar-handle" style="transform: translate(0px, 0px); height: 59.0291%;"></div>
+                        </div>
+                    </div>
+                    <div class="os-scrollbar-corner"></div>
+                </div>
+                <div class="card-footer text-center border-top">
+                    <a class="card-link d-block" href=" {% url 'notifications:list_notifications' %} ">Ver Todas</a>
+                </div>
+            </div>
+        </div>    
+    </li>
+{% endif %}

@@ -1,0 +1,77 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block content %} 
+
+<div class="card mb-3 text-center">
+    <div class="bg-holder d-none d-md-block bg-card z-index-1" style="background-image:url({% static 'img/icons/spot-illustrations/corner-1.png'%});background-position:right bottom;z-index:-1;"></div>
+	<!--/.bg-holder-->
+	<div class="card-body position-relative">
+		<div class="row">
+			<div class="col-lg-12">
+				<h2 class="text-warning">Criar novo Post</h2>					
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="row">
+	<form action="" method="POST" enctype="multipart/form-data">
+		{% csrf_token %} 
+		<div class="col-sm-12">
+			<label class="form-label fs-1">Titulo do Post</label>
+			{{ form.TituloBlog }}																			
+		</div>
+				
+
+		<div class="col-sm-12">
+			<label class="form-label fs-1">Assunto</label>
+			{{ form.AssuntoBlog }}																
+		</div>
+
+		<div class="col-sm-12">
+			<label class="form-label fs-1">Categoria / Tipo de Blog</label>
+			{{ form.CategoriaBlog }}																	
+		</div>
+
+		<div class="col-sm-12 mt-3 text-center">
+			<p class="form-label fs-1">Marcar o Post como <strong>ATIVO?</strong> 
+				Se marcar como ativo, Todos os Usuários receberão Notificações sobre a Postagem</p>
+			<span class="fs-5">Ativo <span class="fas fa-check-square text-primary"></span> 
+			/ Inativo: <span class="far fa-square"></span> 
+			<p>{{ form.Ativo }}</p></span>																		
+		</div>
+		<hr>
+		<div class="col-sm-12 mt-3 text-center">
+			<p class="form-label fs-1">Introdução do Post</p>
+			{{ form.IntroducaoBlog }}																			
+		</div>
+
+		
+		<div class="col-sm-12 mt-3 text-center">
+			<p class="form-label fs-1">Conteúdo do Post</p>
+			{{ form.DescricaoBlog }}																			
+		</div>		
+
+		<div>
+			{% if form.errors %}
+				{% for field in form %}
+					{% for error in field.errors %}
+					<p class="mb-0 fs-1 mt-2 mb-2 text-center alert alert-danger flex-1"> {{ error }} </p>
+					{% endfor %}
+				{% endfor %}
+			{% endif %}
+		</div>
+		
+		<div class="col-12 d-flex justify-content-end">
+			<button class="btn btn-falcon-primary" type="submit">Salvar </button>
+		</div>
+	</form>
+
+	
+</div>
+
+
+
+
+{% endblock content %}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br" dir="ltr">
+
+<header>
+    {% include 'partials/_header.html' %}
+</header>
+
+<body> 
+    <main class="main" id="top">
+        <div class="container" data-layout="container">    
+            <script>
+                var isFluid = JSON.parse(localStorage.getItem('isFluid'));
+                if (isFluid) {
+                    var container = document.querySelector('[data-layout]');
+                    container.classList.remove('container');
+                    container.classList.add('container-fluid');
+                }
+            </script>
+
+     
+            <div class="content">
+
+                {% include 'partials/_navtop.html' %}
+                {% block content %}
+                
+                
+                {% endblock content %}
+                {% include 'partials/_footer.html' %}  
+            </div> 
+            
+        </div>
+        
+    </main>
+    {% include 'partials/js.html' %} 
+</body>  

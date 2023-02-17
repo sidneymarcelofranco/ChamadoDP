@@ -1,0 +1,10 @@
+{
+    "theme_color": "#4a90e2",
+    "background_color": "#ffffff",
+    "display": "browser",
+    "scope": "/",
+    "start_url": "/",
+    "name": "Diretoria de Pessoal - Chamado-DP",
+    "short_name": "Chamado-DP",
+    "description": "Sistema de Chamado Desenvolvido por Cb PM 162131-9 Bruno Alves."
+}

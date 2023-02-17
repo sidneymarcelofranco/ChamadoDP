@@ -1,0 +1,171 @@
+{% extends 'base.html' %} 
+{% block title %}
+    Chamado | Administração
+{% endblock title %} 
+{% load static %} 
+{% block content %} 
+{% load _counters %} 
+
+{% admin_counters %}
+
+<hr>
+
+<div class="col-lg-12 col-xxl-12">
+	{% if chamados %}
+	<div class="card h-100" id="table" data-list="{&quot;valueNames&quot;:[&quot;path&quot;,&quot;views&quot;,&quot;solicitantee&quot;,&quot;unidade&quot;,&quot;time&quot;,&quot;exitRate&quot;,&quot;data&quot;,&quot;unidade&quot;],&quot;page&quot;:20,&quot;pagination&quot;:true,&quot;fallback&quot;:&quot;pages-table-fallback&quot;}">
+		<div class="card-header">
+			<div class="row flex-between-center">
+				<div class="col-auto col-sm-6 col-lg-7">
+					<h6 class="mb-0 text-nowrap py-2 py-xl-0">Você pode pesquisar por qualquer coluna.</h6>
+				</div>
+				<div class="col-auto col-sm-6 col-lg-5">
+					<div class="h-100">
+						<form>
+							<div class="input-group">
+								<input class="form-control form-control-sm shadow-none search" type="search" placeholder="Buscar" aria-label="search">
+								<div class="input-group-text bg-transparent">
+									<span class="fa fa-search fs--1 text-600"></span>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card-body  fs--1 px-0 py-0">
+			<div class="table-responsive scrollbar">
+				<table class="table table-hover fs--1 mb-0 overflow-hidden ">
+						<thead class="bg-200 text-900">
+							<tr>
+								<th class="sort pe-1 align-middle white-space-nowrap" data-sort="path">Id</th>
+								<th class="sort pe-1 align-middle white-space-nowrap" data-sort="views">Titulo</th>
+								<th class="sort pe-1 align-middle white-space-nowrap" data-sort="solicitantee">Solicitante</th>
+								<th class="sort pe-1 align-middle white-space-nowrap" data-sort="unidade">Unidade</th>
+								<th class="sort pe-1 align-middle white-space-nowrap" data-sort="time">Categoria</th>
+								<th class="sort pe-1 align-middle white-space-nowrap" data-sort="data">Data</th>
+								<th class="sort pe-card align-middle white-space-nowrap" data-sort="exitRate">Status</th>
+								<th class="sort pe-card align-middle white-space-nowrap" scope="col">Ações</th>
+							</tr>
+						</thead>
+						<tbody class="list ">
+							{% for c in chamados %}	
+								<tr class="btn-reveal-trigger">
+									<td class="align-middle white-space-nowrap  path">
+										<h6>
+											<a class="text-primary fw-semi-bold " href="{% url 'administration:admin_update_request' c.id %}">
+												{{c.id}}
+											</a>
+										</h6>
+									</td>
+									<td class="align-middle white-space-nowrap views ">
+										<h6>
+											<a class="text-primary fw-semi-bold" href="{% url 'administration:admin_update_request' c.id %}">
+												{{c.TituloDaSolicitacao}}
+											</a>
+										</h6>									
+									</td>
+									<td class="align-middle white-space-nowrap solicitantee ">
+										<h6>
+											<a class="text-primary fw-semi-bold" href="{% url 'administration:admin_update_request' c.id %}">
+												{{c.PostoGradSolicitante}} {{c.NomeGuerraSolicitante}}
+											</a>
+										</h6>									
+									</td>
+									<td class="align-middle white-space-nowrap unidade ">
+										<h6>
+											<a class="text-primary fw-semi-bold" href="{% url 'administration:admin_update_request' c.id %}">
+												{{c.GrandeComandoSolicitante}} / {{c.UnidadeSolicitante}} 
+											</a>
+										</h6>									
+									</td>
+									<td class="align-middle white-space-nowrap time ">
+										<h6>
+											<a class="text-primary fw-semi-bold" href="{% url 'administration:admin_update_request' c.id %}">
+												{{c.CategoriaDaSolicitacao}}
+											</a>
+										</h6>
+									</td>
+									<td class="align-middle white-space-nowrap data ">
+										<h6>
+											<a class="text-primary fw-semi-bold" href="{% url 'administration:admin_update_request' c.id %}">
+												{{c.DataDaSolicitacao|date:"d/m/Y"}}
+											</a>
+										</h6>
+									</td>
+									<td class="align-middle exitRate pe-card">
+										{% if c.StatusAtual_id == 1 %}
+											<h6 class="badge badge-soft-danger">																		
+													{{c.StatusAtual}}										
+											<span class="ms-1 fab fa-adobe" data-fa-transform="shrink-2"></span>
+											</h6>
+										{% elif c.StatusAtual_id == 2%} 
+											<h6 class="badge badge-soft-warning">																		
+													{{c.StatusAtual}}										
+											<span class="ms-1 fas fa-search" data-fa-transform="shrink-2"></span>
+											</h6>
+										{% elif c.StatusAtual_id == 3 %}
+											<h6 class="badge badge-soft-success">																		
+												{{c.StatusAtual}}										
+											<span class="ms-1 far fa-check-circle" data-fa-transform="shrink-2"></span>
+											</h6>
+										{% elif c.StatusAtual_id == 4 %}
+											<h6 class="badge badge-soft-primary">																		
+												{{c.StatusAtual}}										
+											<span class="ms-1 far fa-times-circle" data-fa-transform="shrink-2"></span>
+											</h6>	
+										{% elif c.StatusAtual_id == 5 %}
+											<h6 class="badge badge-soft-dark">																		
+												{{c.StatusAtual}}										
+											<span class="ms-1 fab fa-sistrix" data-fa-transform="shrink-2"></span>
+											</h6>											
+										{% endif %}
+									</td>
+
+									<td>							
+										<a  href="{% url 'administration:admin_update_request' c.id %}" class="btn btn-sm btn-primary ms-2" type="button">
+											<span class="">Ver</span>
+										</a>						
+									</td>
+								</tr>				
+							{% endfor %}														
+						</tbody>
+				</table>
+			</div>
+			<div class="text-center d-none" id="pages-table-fallback">
+				<p class="fw-bold fs-1 mt-3">Sem dados encontrados</p>
+			</div>
+		</div>
+		<div class="card-footer">
+			<div class="row align-items-center">
+				<div class="pagination d-none">
+					<li class="active">
+						<button class="page" type="button" data-i="1" data-page="8">1</button>
+					</li>
+					<li>
+						<button class="page" type="button" data-i="2" data-page="8">2</button>
+					</li>
+				</div>
+				<div class="col">
+					<p class="mb-0 fs--1">
+						<span class="d-none d-sm-inline-block me-2" data-list-info="data-list-info">1 to 8 of 13</span>
+					</p>
+				</div>
+				<div class="col-auto d-flex">
+					<button class="btn btn-sm btn-primary disabled" type="button" data-list-pagination="prev" disabled="">
+						<span>Anterior</span>
+					</button>
+					<button class="btn btn-sm btn-primary px-4 ms-2" type="button" data-list-pagination="next">
+						<span>Próxima</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% else %}					
+		<h3 class="text-center">Nenhum Chamado Recente</h3>
+	{% endif %}
+</div>
+
+<hr>
+
+{% endblock content %}

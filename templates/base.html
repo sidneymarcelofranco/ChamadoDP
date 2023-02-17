@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br" dir="ltr">
+
+<header>
+    {% include 'partials/_header.html' %} 
+    {% block partialCSS %}
+    
+    {% endblock partialCSS %}   
+    <title>
+        {% block title %}
+        Chamado | Homepage
+        {% endblock title %}
+    </title>
+</header>
+
+<body> 
+    <main class="main" id="top">
+        <div class="container" data-layout="container">    
+            <script>
+                var isFluid = JSON.parse(localStorage.getItem('isFluid'));
+                if (isFluid) {
+                    var container = document.querySelector('[data-layout]');
+                    container.classList.remove('container');
+                    container.classList.add('container-fluid');
+                }
+            </script>
+
+            {% include 'partials/_sidemenu.html' %}         
+            <div class="content">
+
+                {% include 'partials/_navtop.html' %}
+                {% block content %}
+                
+                
+                {% endblock content %}
+                {% include 'partials/_footer.html' %}        
+            
+            </div>
+            
+        </div>
+    </main>
+    <script>
+        document.body.addEventListener('htmx:configRequest', (e) => {
+            e.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        })    
+    </script>       
+
+    {% include 'partials/js.html' %} 
+
+    {% block scripts %}
+    
+    {% endblock scripts %}   
+</body>  

@@ -1,0 +1,190 @@
+
+<button class="btn btn-primary" id="abremodal" type="button" data-bs-toggle="modal" hidden data-bs-target="#staticBackdrop"></button>
+
+<div class="modal fade" id="staticBackdrop" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg mt-6" role="document">
+    <div class="modal-content border-2 border-danger">
+      <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1">
+          <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      <div class="modal-body p-0 ">         
+        <div class="bg-light rounded-top-lg py-3 ps-4 pe-6">
+          <h2 class="mb-1 text-danger text-center fw-bold" id="staticBackdropLabel">Você tem {{notifications.unchecked}} Notificaç{{ notifications.unchecked|pluralize:"ão,ões!"}} não Lid{{ notifications.unchecked|pluralize:"a,as"}}.</h2>
+          <p class="fs--2 mb-0 text-center">
+              <i>Esta janela aparecerá enquanto houver Notificações não visualizadas.</i>
+            </p>
+          <p class="fs--2 mb-0 fw-bold text-center">
+              <i>Verifique as Notificações para saber como anda sua Solicitação!.</i>
+            </p>
+          <div class="col-sm-auto text-end fs--2 mt-3">
+            {% if notifications.total_notifications != 0%}
+
+            {% if messages %}
+          <hr>
+            {% for message in messages %}
+              <div class="card mb-3 {{ message.tags }}">
+                <div class="card-body {{ message.tags }}">
+                  <div class="row justify-content-between align-items-center">
+                    <div class="col-md">
+                      <h5 class="mb-2 mb-md-0 text-center {% if message.tags %} {{ message.tags }} {% endif %} "> 
+                        {{ message }}                  
+                      <span class="ms-1 far fa-check-circle" data-fa-transform="shrink-2"></span>
+                      </h5>
+                    </div>        
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+
+            <p class="mb-1 mb-md-0 float-start fs--1" style="display:inline">
+              Notificações - {{notifications.total_notifications}} |
+              <a href="{% url 'notifications:list_notifications' %}"> 
+              <strong class="text-danger">{{notifications.unchecked}} Não Lidas</strong>
+              </a> |
+              <a href="{% url 'notifications:list_notifications_archive' %}">
+                <strong class="text-warning">{{notifications.archived}} Arquivadas</strong>
+              </a>
+            </p>
+            
+            <p class="mb-1 mb-md-0 btn btn-falcon-info btn-sm float-end fs--2 ms-2" style="display:inline">
+              <a class="text-info" href="{% url 'notifications:mark_all_read' %}">Marcar todas como lidas</a>
+            </p>
+            <p class="mb-1 mb-md-0 btn btn-falcon-primary btn-sm float-end fs--2" style="display:inline">
+              <a href="{% url 'notifications:list_notifications' %}">ver todas</a>
+            </p>
+            {% else %}
+            {% endif %}            
+          </div>
+        </div>
+        
+        <div class="p-4">
+          <div class="row">
+            <div class="col-lg-12">
+                {% for notification in query %}
+                    {% if notification.user_has_archive == 0 %}
+                        {% if notification.user_has_seen == 0 %}
+
+                        <div class="hover-actions-trigger ">
+                            <a class="border-bottom-0 notification rounded-0 border-x-0 border-300 notification-unread"  
+                              {% if notification.Solicitacao.id %}
+                                href="{% url 'notifications:post-notification' notification.id notification.Solicitacao.id %}"
+                              {% elif notification.BlogPost.SlugBlog %}
+                                href="{% url 'help_pages:blog-notification' notification.pk  notification.BlogPost.SlugBlog|title %}"
+                              {% elif notification.NovoUser.id %}
+                                href="{% url 'accounts:user-notification' notification.id notification.NovoUser.id %}"
+                              {% endif %}
+                              >  
+                              <div class="notification-avatar text-center align-self-center">
+                                <div class="avatar avatar-xl me-3">
+                                  <span class="align-middle text-center mb-0 me-3 fs-3 fas fa-check-double text-secondary"></span>
+                                </div>
+                              </div> 
+                              <div class="notification-body">
+                                <p class="mb-1">        
+                                
+                                  <span class="fw-bold font-sans-serif">{{notification.from_user.first_name}} {{notification.from_user.last_name}}</span>
+                                  {% if notification.TipoNotificacao_id == 1 %}
+                                    <strong class="badge rounded-pill bg-success fs--2">{{notification.TipoNotificacao|upper}}:</strong> 
+                                  {% elif notification.TipoNotificacao_id == 2 %}
+                                      <strong class="badge rounded-pill bg-warning fs--2">{{notification.TipoNotificacao|upper}}:</strong>
+                                  {% elif notification.TipoNotificacao_id == 3 %}
+                                      <strong class="badge rounded-pill bg-danger fs--2">{{notification.TipoNotificacao|upper}}:</strong>
+                                  {% elif notification.TipoNotificacao_id == 4 %}
+                                    <strong class="badge rounded-pill bg-primary fs--2">{{notification.TipoNotificacao|upper}}:</strong>
+                                  {% elif notification.TipoNotificacao_id == 5 %}
+                                    <strong class="badge rounded-pill bg-success fs--2">{{notification.TipoNotificacao|upper}}:</strong>
+                                  {% elif notification.TipoNotificacao_id == 6 %}
+                                    <strong class="badge rounded-pill bg-info fs--2">{{notification.TipoNotificacao|upper}}:</strong>
+                                  {% elif notification.TipoNotificacao_id == 7 %}
+                                    <strong class="badge rounded-pill bg-dark fs--2">{{notification.TipoNotificacao|upper}}:</strong>
+                                  {% elif notification.TipoNotificacao_id == 8 %}
+                                    <strong class="badge rounded-pill bg-dark fs--2">{{notification.TipoNotificacao|upper}}:</strong>
+                                    {% elif notification.TipoNotificacao_id == 9 %}
+                                    <strong class="badge rounded-pill bg-info fs--2">{{notification.TipoNotificacao|upper}}:</strong>
+                                  {% elif notification.TipoNotificacao_id == 11 %}
+                                    <strong class="badge rounded-pill badge-soft-success fs--2">{{notification.TipoNotificacao|upper}}</strong>
+                                  {% elif notification.TipoNotificacao_id == 12 %}
+                                    <strong class="badge rounded-pill bg-info fs--2">{{notification.TipoNotificacao|upper}}:</strong>
+                                  {% endif %}          
+                                  
+                                  {% if notification.BlogPost != None %}
+                                  <p>{{notification.BlogPost}}</p>
+                                  {% endif %}
+                                  {% if notification.Solicitacao != None %}
+                                  <p><b>Titulo do Chamado: </b>{{notification.Solicitacao.TituloDaSolicitacao}}</p> 
+                                  <span class="text-end">            
+                                    {% if notification.Solicitacao.StatusAtual_id == 1 %}
+                                        <span class="text-end badge bg-danger fs-1 fw-bold">PENDENTE</span>
+                                      {% elif notification.Solicitacao.StatusAtual_id == 2 %}
+                                        <span class="text-end badge bg-warning fs-1 fw-bold">EM ANÁLISE</span>
+                                      {% elif notification.Solicitacao.StatusAtual_id == 3 %}
+                                        <span class="text-end badge bg-success fs-1 fw-bold">RESOLVIDO</span>
+                                      {% elif  notification.Solicitacao.StatusAtual_id == 4 %}
+                                        <span class="text-end badge bg-info fs-1 fw-bold">RESOLVIDO E FECHADO</span>
+                                      {% elif notification.Solicitacao.StatusAtual_id == 5 %}
+                                        <span class="text-end badge bg-secondary fs-1 fw-bold">REABERTO</span>
+                                      {% else %}
+                                    {% endif %}            
+                                  </span>                                             
+                                  {% endif %} 
+                                  {% if notification.RespostaAdmin  != None %}
+                                  <p>{{notification.RespostaAdmin|safe}}</p>
+                                  {% endif %} 
+                                  {% if notification.RespostaUser != None %}
+                                  <p>{{notification.RespostaUser|safe}}</p>
+                                  {% endif %}  
+                                </p>
+                    
+                                  <span class="notification-time mb-0">
+                                    <span class=" mb-0 fs--1 far fa-clock text-secondary"></span>
+                                    {{notification.whenpublished}}
+                                  </span>
+                    
+                                  <span class="fs-0">
+                                    {% if notification.Solicitacao.id %}
+                                      <span class="fw-bold">
+                                        <span class="badge badge-soft-dark text-end">Chamado N°: {{notification.Solicitacao.id}}</span>
+                                      </span>
+                                    {% elif notification.BlogPost.id %}
+                                      <span class="fw-bold">
+                                        <span class="badge badge-soft-info text-end">Postagem: {{notification.BlogPost.CategoriaBlog}}</span>
+                                      </span>
+                                    {% endif %}
+                                  </span> 
+                                  
+                                </div>                                          
+                            </a> 
+                            <div class="btn-group z-index-2 hover-actions end-0 me-3 position-absolute bottom-50 end-0">
+                              {% if notification.TipoNotificacao_id == 7 %}
+                              <a 
+                                class="btn btn-light fs--2 z-index-10" type="button"             
+                                href="{% url 'notifications:post-notification' notification.id notification.Solicitacao.id %}"
+                                >          
+                                <span class="fas fa-envelope-open-text"></span>
+                                 Ir para Resposta
+                              </a>          
+                              {% else %}          
+                              <a 
+                                class="btn btn-light fs--2 z-index-10" type="button"             
+                                href="{% url 'notifications:mark_as_read' notification.id %}"
+                                >          
+                                <span class="fas fa-envelope-open"></span>
+                                 Marcar como lida
+                              </a>
+                              {% endif %}        
+                            </div>
+                          </div>
+                        {% endif %}  
+                    {% endif %}  
+                {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

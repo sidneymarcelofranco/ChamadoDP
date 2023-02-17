@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+{% block title %}
+    Chamado | Atualizar N°-{{details.id}}
+{% endblock title %}
+{% load static %} 
+{% block content %} 
+{% load _popup_notification %}
+
+<div class="col-12">
+	<div class="card bg-transparent-50 overflow-hidden">
+		<div class="card-header position-relative">
+			<div class="bg-holder d-none d-md-block bg-card z-index-1" style="background-image:url({% static 'img/icons/spot-illustrations/corner-4.png'%});background-position:right bottom;z-index:-1;"></div>
+			<!--/.bg-holder-->
+			<div class="position-relative z-index-2">
+				<div>
+					<h3 class="text-primary mb-1 text-center">
+						Diretoria de Pessoal - Seção de Suporte
+					</h3>					
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% if messages %}
+<br>
+	{% for message in messages%}
+		<div {% if message.tags %} class="alert {{ message.tags }} {% endif %} border-2 d-flex align-items-center" role="alert">
+			<p class="mb-0 fs-1 text-center flex-1">{{ message}}</p>
+			<button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	{% endfor %}
+{% endif %}	
+
+<hr>
+
+<div class="card mb-3 ">
+	<div class="card bg-transparent-50 overflow-hidden">
+		<div class="card-header position-relative">
+			<div class="bg-holder d-none d-md-block bg-card z-index-1" style="background-image:url({% static 'img/icons/spot-illustrations/corner-2.png'%});background-position:right bottom;z-index:-1;"></div>
+			<!--/.bg-holder-->
+			<div class="position-relative z-index-2">
+	<div class="card-body">
+		<div class="row align-items-center text-center mb-3">
+			<div class="col-sm-6 text-sm-start">
+				<img src=" {% static 'img/logos/DP.png' %} " alt="invoice" width="150">
+			</div>
+			<div class="col text-sm-end mt-3 mt-sm-0">
+				<h2 class="mb-3">Solicitação de Chamados</h2>
+				<h5>Diretoria de Pessoal</h5>
+				<p class="fs--1 mb-0">Avenida Cruzeiro do Sul, 260 <br>Canindé, São Paulo </p>
+				<p class="fs--1">
+					<a href="mailto:dltic@policiamilitar.sp.gov.br">dltic@policiamilitar.sp.gov.br</a>
+					<br>
+					<a href="tel:+1133277797">(11) 3327-7797 </a>
+				</p>	
+			</div>
+			<div class="col-12">
+				<hr>
+			</div>
+		</div>
+			<div class="card-header">
+				<h5 class="mb-0 fs-4">Dados do Chamado  <i class="far fa-list-alt"></i> </h5>
+			</div>
+			<div class="card-body">
+				<form action="" method="POST" enctype="multipart/form-data">
+					{% csrf_token %} 
+					<div class="row gx-2">
+						<div class="col-12 mb-3">
+							<label class="form-label fs-2" for="event-name">Titulo</label>
+							{{ form.TituloDaSolicitacao }}
+							{% if form.TituloDaSolicitacao.errors %}										
+								{% for error in form.TituloDaSolicitacao.errors %}
+									<ul>
+										<li>{{ error|escape }}</li>
+									</ul>
+								{% endfor %}										
+							{% endif %}
+						</div>
+						
+						<div class="col-sm-6">
+							<label class="form-label fs-1">Categoria</label>
+							{{ form.CategoriaDaSolicitacao }}
+								{% if form.CategoriaDaSolicitacao.errors %}										
+									{% for error in form.CategoriaDaSolicitacao.errors %}
+										<ul>
+											<li>{{ error|escape }}</li>
+										</ul>
+									{% endfor %}										
+							{% endif %}  
+						</div>
+
+						<div class="col-sm-6">
+							<label class="form-label fs-1">Destino do Chamado</label>
+							{{ form.DestinoDaSolicitacao }}
+								{% if form.DestinoDaSolicitacao.errors %}										
+									{% for error in form.DestinoDaSolicitacao.errors %}
+										<ul>
+											<li>{{ error|escape }}</li>
+										</ul>
+									{% endfor %}										
+							{% endif %}  
+						</div>
+
+						<div class="col-6 mt-5  text-center mb-3">
+							<label class="form-label fs-2">Data da Solicitação</label>
+							<input class="form-control text-center fs-2" type="text" value="{% now "d/m/Y" %}" disabled>
+						</div>
+
+						<div class="col-6 mt-5  text-center mb-3">
+							<label class="form-label fs-2">Tempo médio para Solução</label>
+							<input class="form-control text-center fs-2" type="text" placeholder="1 hora" disabled>
+						</div>
+
+						<label class="form-label text-center fs-2 mt-3 " for="event-description">Descrição do Chamado</label>
+
+						<div class="col-12 mb-2 text-center">
+							{{ form.DescricaoDoChamado }}
+								{% if form.DescricaoDoChamado.errors %}										
+									{% for error in form.DescricaoDoChamado.errors %}
+										<ul>
+											<li>{{ error|escape }}</li>
+										</ul>
+									{% endfor %}										
+							{% endif %}
+						</div>
+
+						<div class="col-12 mb-2">
+							<div class="list-group">
+								<div class="d-flex flex-column flex-sm-row justify-content-between mb-1 mb-md-0">
+									<h5 class="mb-1 text-warning fa-bounce">Aviso <i class="fas fa-exclamation-circle"></i>
+									</h5>									  
+								</div>
+								<p class="mb-3 fs--1"><b> Será permitido o Upload de apenas 1 arquivo por chamado</b>, devido a <b><i>grande 
+									facilidade de armazenamento gratuito em Nuvem</i></b>, guardaremos apenas o necessário em nossos servidores,
+									caso você necessite enviar diversos arquivos ou arquivos muito grande, será necessário criar uma pasta
+									no <a href="https://www.google.com/intl/pt-BR/drive/" target="_blank">Google Drive</a> e compartilhar o link em seu chamado 
+									para que possamos acessar os arquivos. <b>Caso tenha dificuldade, acesse o nosso <b> <a href="http://10.39.20.144:8000/Chamado/Ajuda/Notificacoes/7/Post/Criar-Pastas-Compartilhadas-No-Google-Drive/" target="_blank">TUTORIAL</a></b> de como realizar o compartilhamento.</b>
+								</p>										
+							</div>				
+						{{ form.DocumentosSolicitacao }}
+						</div>
+
+						
+						<div class="col-12">
+							<div class="border-dashed-bottom my-3"></div>
+						</div>
+												
+
+						<div class="">
+							<h5 class="mb-4 mt-4 fs-4">Dados do Solicitante <i class="far fa-user-circle"></i></h5>
+						</div>			
+						
+					
+						<div class="row align-items-center text-center">
+							<div class="col-sm-6 fs-2 text-sm-start">
+								<span class="fw-bold">Posto / Graduação: </span> {{ request.session.postoo }}
+								<input class="form-control text-center fs-2" type="text" name="nposto" value="{{ request.session.postoo }}" hidden>
+								<br>
+								<span class="fw-bold">RE:  </span>{{ request.session.re }}
+								<input class="form-control text-center fs-2" type="text" name="nre" value="{{ request.session.re }}" hidden> 
+								<br>
+								<span class="fw-bold">Nome de Guerra:  </span>{{ request.session.nomeguerra }}
+								<input class="form-control text-center fs-2" type="text" name="nnomeguerra" value="{{ request.session.nomeguerra }}" hidden> 
+								<br>
+								<span class="fw-bold">CPF: </span> {{ request.session.cpf }}-{{ request.session.dig }}
+								<input class="form-control text-center fs-2" type="text" name="ncpf" value="{{ request.session.cpf }}" hidden>
+								<br>
+								<span class="fw-bold">Função: </span> {{ request.session.funcao }}
+								<input class="form-control text-center fs-2" type="text" name="nfuncao" value="{{ request.session.funcao }}" hidden>
+								<br>
+							</div>
+
+							<div class="col text-sm-end fs-2 mt-sm-0">							
+							
+								<span class="fw-bold">Código da OPM:  </span>{{ request.session.opmcod }}
+								<input class="form-control text-center fs-2" type="text" name="nopmcod" value="{{ request.session.opmcod }}" hidden>
+								<br>
+								<span class="fw-bold">Grande Comando:  </span>{{ request.session.opmco1 }}
+								<input class="form-control text-center fs-2" type="text" name="nopmcod1" value="{{ request.session.opmco1 }}" hidden>
+								<br>
+								<span class="fw-bold">Departamento:  </span>{{ request.session.opmco2 }}
+								<br>
+								<span class="fw-bold">Unidade:  </span>{{ request.session.opmco3 }}
+								<input class="form-control text-center fs-2" type="text" name="nopmcod3" value="{{ request.session.opmco3 }}" hidden>
+								<br>
+								<span class="fw-bold">Unidade:  </span>{{ request.session.opmco4 }}	
+							</div>
+
+							<div class="col-12">								
+								<hr>
+							</div>
+
+						</div>
+
+					</div>
+
+					<div class="col-12 d-flex justify-content-end">
+                        <button class="btn btn-falcon-primary" type="submit">Salvar </button>
+                    </div>
+				</form>
+			</div>
+		</div> 
+	<div class="card-footer bg-light">
+		<p class="fs--1 text-center mb-0">
+			<strong>Observação: </strong> Siga as Instruções para o Preenchimento dos dados, em caso de Dúvidas visite nosso <a href="#">FAQ</a>
+		</p>
+	</div>  
+	</div>  
+	</div>  
+	</div>  
+
+</div> 
+
+
+{% popup_notification %}
+{% block scripts %} 
+	{% if users_notification and not request.user.is_superuser %}
+		<script>
+			document.querySelector('#abremodal').click();
+		</script>
+	{% endif %}
+{% endblock scripts %}
+{% endblock content %}

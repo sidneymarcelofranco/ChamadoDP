@@ -1,0 +1,505 @@
+{% extends 'base.html' %} 
+{% block title %}
+    Chamado | Chamado-{{details.id}}
+{% endblock title %}
+{% load static %} 
+{% load _counters %} 
+{% block content %} 
+
+{% admin_counters %}
+
+<hr>
+
+<div class="card mb-3 ">
+	<div class="card bg-transparent-50 overflow-hidden">
+		<div class="card-header position-relative">
+			<div class="bg-holder d-none d-md-block bg-card z-index-1" style="background-image:url({% static 'img/icons/spot-illustrations/corner-2.png'%});background-position:right bottom;z-index:-1;">
+			</div>			
+			<div class="position-relative z-index-2">
+				<div class="card-body">		
+					<div class="card-header row gx-2">
+						<div class="col-sm-6">
+							<h5 class="mb-0 fs-4">Dados do Chamado  {{details.id}} <i class="far fa-list-alt"></i> </h5>
+							{% if respostaresponsavel == None %}
+								{% if details.Responsavel == None %}
+									<span>Sem Responsável</span>
+								{% else %}
+								<span class="fw-bold">Em Atendimento por: </span><span class="fw-bold text-danger">{{details.Responsavel.first_name}} {{details.Responsavel.last_name|title}}</span>
+								{% endif %}
+								{% else %}
+								<span class="fw-bold" >Respondido por: </span><span class="fw-bold text-success">{{respostaresponsavel.RespostaResponsavel.first_name}} {{respostaresponsavel.RespostaResponsavel.last_name|title}}</span>
+							{% endif %}
+						</div>
+						{% if details.Responsavel_id == Null %}
+							<div class="col-sm-6 text-end">
+								<form method="POST"> 
+									{% csrf_token %}
+									<button class="btn fa-bounce btn-primary text-end" id="responsavel" name="responsavel"  type="submit">Ser Responsável</button>
+								</form>
+							</div>
+						{% else %}
+							<div class="col-sm-6 text-end fs-1">								
+								<form method="POST"> 
+									{% csrf_token %}									 
+									{% if ultimostatus.id == 4 %}
+										<span class=" badge bg-info fs-2 fw-bold">RESOLVIDO E FECHADO</span>
+									{% else %}
+									<button class="btn btn-danger text-end" id="pendencia" name="pendencia"  type="submit">Deixar Pendente</button>
+									{% endif %}									
+								</form>
+							</div>					
+						{% endif %}
+					</div>					
+					{% comment %} INICIO DO BODY {% endcomment %}
+					<div class="card-body">
+						<div class="row gx-2">
+							<div class="col-12 text-center mb-3">
+								<label class="form-label fs-1" for="event-name">Titulo:</label>
+								<p class="form-label fs-1">{{ details.TituloDaSolicitacao }}</p>							
+							</div>
+							
+							<div class="col-sm-6 text-center">
+								<label class="form-label fs-1">Categoria:</label>
+								<p class="form-label fs-1">{{ details.CategoriaDaSolicitacao }}</p>
+							</div>
+
+							<div class="col-sm-6 text-center">
+								<label class="form-label fs-1">Destino do Chamado:</label>
+								<p class="form-label fs-1">{{ details.DestinoDaSolicitacao }}</p>									
+							</div>
+
+							<div class="col-6 mt-5  text-center mb-3">
+								<label class="form-label fs-1">Data da Solicitação:</label>
+								<input class="form-control text-center fs-1" type="text" value="{{ details.DataDaSolicitacao }}" disabled>
+							</div>
+
+							<div class="col-6 mt-5  text-center mb-3">
+								<label class="form-label fs-1">Data da Respostas:</label>
+								{% if tempo_atendimento == '24 Horas'%}
+								<input class="form-control text-center fs-1" type="text" value="Não respondido" disabled>
+								{% else %}
+								<input class="form-control text-center fs-1" type="text" value="{{details.DataDoEncerramento}}" disabled>
+								{% endif %}
+							</div>
+
+							<div class="col-12 mt-5  text-center mb-3">
+								<label class="form-label fs-1">Tempo para Solução:</label>
+								{% if tempo_atendimento == '24 Horas'%}
+								<input class="form-control text-center fs-1" type="text" value=" Até 24 horas " disabled>
+								{% else %}
+								<input class="form-control text-center fs-1" type="text" 
+								value="{% if dia == 0 %}{% else %}{{dia}} dia{{dia|pluralize:"s"}}{% endif %}{% if hora == 0 %}{% else %} {{hora}} hora{{hora|pluralize:"s"}}{% endif %}{% if minuto == 0 %}{% else %} {{minuto}} minuto{{minuto|pluralize:"s"}}{% endif %}{% if segundo > 0 %} {{segundo}} Segundo{{segundo|pluralize:"s"}}{% else %}{% endif %}" 
+								disabled>
+								{% endif %}
+							</div>
+							{% comment %} HISTORICO {% endcomment %}
+								{% if historico %}
+									<div class="col-xxl-12 col-lg-12 order-xxl-1">
+										<div class="card-header">
+											<h6 class="mb-0 fs-1">Histórico</h6>
+										</div>
+										<div class="card-body scrollbar recent-activity-body-height ps-2">
+											{% for h in historico %}
+												<div class="row g-3 timeline timeline-success timeline-past pb-card">
+													<div class="col-auto  ps-4 ms-2">
+														<div class="ps-2 ">
+															{% if h.StatusAtual_id == 1 %}
+															<div class="icon-item icon-item-sm rounded-circle bg-200 shadow-none">
+																<span class="text-danger fas fa-plus"></span>
+															</div>
+															{% elif h.StatusAtual_id == 2 %}
+															<div class="icon-item icon-item-sm rounded-circle bg-200 shadow-none">
+																<span class="text-warning fas fa-search"></span>
+															</div>
+															{% elif h.StatusAtual_id == 3 %}
+															<div class="icon-item icon-item-sm rounded-circle bg-200 shadow-none">
+																<span class="text-success fas fa-check"></span>
+															</div>
+															{% elif h.StatusAtual_id == 4 %}
+															<div class="icon-item icon-item-sm rounded-circle bg-200 shadow-none">
+																<span class="text-info far fa-window-close"></span>
+															</div>
+															{% elif h.StatusAtual_id == 5 %}
+															<div class="icon-item icon-item-sm rounded-circle bg-200 shadow-none">
+																<span class="text-info fas fa-backward"></span>
+															</div>
+															{% endif %}
+														</div>
+													</div>			
+													<div class="col">
+														<div class="row gx-0 border-bottom pb-card">
+															<div class="col">
+																{% if h.StatusAtual_id == 1 %}
+																	<h6 class="text-800 mb-1">Chamado N° {{h.id}} Criado</h6>
+																	<p class="fs--1 text-600 mb-0">{{h.history_date}}</p>
+																{% elif h.StatusAtual_id == 2 %}
+																	<h6 class="text-800 mb-1">Iniciado o Atendimento</h6>
+																	<p class="fs--1 text-600 mb-0">{{h.history_date}}</p>
+																{% elif h.StatusAtual_id == 3 %}
+																	<h6 class="text-800 mb-1">Chamado Resolvido</h6>
+																	<p class="fs--1 text-600 mb-0">{{h.history_date}}</p>
+																{% elif h.StatusAtual_id == 4 %}
+																	<h6 class="text-800 mb-1">Chamado Fechado</h6>
+																	<p class="fs--1 text-600 mb-0">{{h.history_date}}</p>
+																{% elif h.StatusAtual_id == 5 %}
+																	<h6 class="text-800 mb-1">Chamado Reaberto</h6>
+																	<p class="fs--1 text-600 mb-0">{{h.history_date}}</p>
+																{% endif %}
+															</div>
+															<div class="col">
+																<h6 class="text-800 mb-1">Categoria: </h6>
+																<p class="fs--1 text-600 mb-0">{{h.CategoriaDaSolicitacao}}</p>
+															</div>
+															<div class="col">
+																{% if h.Responsavel == None %}
+																	<h6 class="text-800 mb-1">Responsável: </h6>
+																	<p class="fs--1 text-danger mb-0">Sem Responsável</p>
+																{% else %}
+																<h6 class="text-800 mb-1 ">Responsável: </h6>
+																<p class="fs--1 fw-200 text-primary mb-0"> {{h.Responsavel.first_name|title}} {{h.Responsavel.last_name|title}}</p>
+																{% endif %}
+															</div>
+															
+															{% if h.StatusAtual_id == 1 %}
+															<div class="col text-end">												
+																<p class="fs--2 text-500 text-end mb-0">Há {{ h.history_date|timesince|title }}</p>												
+																<p class="fs--2 mb-0 badge bg-danger text-end">{{h.StatusAtual|title}}</p>
+															</div>
+															{% elif h.StatusAtual_id == 2 %}
+															<div class="col text-end">												
+																<p class="fs--2 text-500 text-end mb-0">Há {{ h.history_date|timesince|title }}</p>												
+																<p class="fs--2 mb-0 badge bg-warning text-end">{{h.StatusAtual|title}}</p>
+															</div>														
+															{% elif h.StatusAtual_id == 3 %}
+															<div class="col text-end">												
+																<p class="fs--2 text-500 text-end mb-0">Há {{ h.history_date|timesince|title }}</p>												
+																<p class="fs--2 mb-0 badge bg-success text-end">{{h.StatusAtual|title}}</p>
+															</div>
+															{% elif h.StatusAtual_id == 4 %}
+															<div class="col text-end">												
+																<p class="fs--2 text-500 text-end mb-0">Há {{ h.history_date|timesince|title }}</p>												
+																<p class="fs--2 mb-0 badge bg-primary text-end">{{h.StatusAtual|title}}</p>
+															</div>	
+															{% elif h.StatusAtual_id == 5 %}
+															<div class="col text-end">												
+																<p class="fs--2 text-500 text-end mb-0">Há {{ h.history_date|timesince|title }}</p>												
+																<p class="fs--2 mb-0 badge bg-info text-end">{{h.StatusAtual|title}}</p>
+															</div>											
+															{% endif %}
+														</div>
+													</div>								
+												</div>
+											{% endfor %}
+										</div>
+									</div>
+									{% else %}
+								
+								{% endif %}
+
+								<div class="col-12">
+									<div class="border-dashed-bottom my-3"></div>
+								</div>
+							
+							{% comment %} CONTEÚDO DO CHAMADO {% endcomment %}							
+								<label class="text-center text-dark fs-4 mt-3 ">Descrição do Chamado</label>
+								<br>
+								<div class="col-12 border mb-2 p-2 bg-white">				
+									{{ details.DescricaoDoChamado|safe }}
+								</div>
+
+								{% if details.DocumentosSolicitacao %}
+									<a class="fs-1 mb-3" href="{{details.DocumentosSolicitacao.url}}" target="_blank" download>
+										ARQUIVO ENVIADO PELO SOLICITANTE  <i class="fas fa-file-archive"> </i>
+									</a>
+								{% else %}
+									<span class="fs-1 mb-3 text-warning">O Solicitante não Enviou Arquivos.</span> 
+								{% endif %} 
+													
+								<label class="bg-200 rounded-3 text-center text-dark fs-4 mt-3 " >Resolução do Chamado</label>
+								<br>
+
+							{% comment %} RESPOSTA CHAMADO - CHAT COM USUÁRIO {% endcomment %}
+								{% for r in respostas %}														
+									<div class="col-1 text-center align-self-center">
+										<i class="far fa-check-circle fs-6 text-success" ></i>
+									</div>								
+										<div class="fs-0 col-10" >					
+											<div class="notification-body mb-1 bg-200 rounded-3 p-2">
+												<p class="mb-1">																				
+													<p class="text-primary fw-bold fs-0">Respondido por: {{respostaresponsavel.RespostaResponsavel.first_name}} {{respostaresponsavel.RespostaResponsavel.last_name|title}}</p>
+													{{ r.RespostaDaSolicitacao|safe }}													
+												</p>
+												{% if r.RespostaAnexo %}
+													<a class="fs-1 mb-3 text-danger" href="{{r.RespostaAnexo.url}}" download>
+														ANEXO DA RESPOSTA  <i class="fas fa-file-archive"> </i>
+													</a>
+												{% else %}
+													<span class="fs-1 mb-3 text-danger">Não existem arquivos na resposta.</span> 
+												{% endif %} 
+												
+												<div class="row">
+													<div class="col-6">
+														<span class="notification-time">
+															<i class="fas fa-clock"></i>
+															Respondida {{r.whenreplyed}}																																												
+														</span>								
+													</div>
+													<div class="col-6 text-end">
+														<span class="notification-time">
+															{% if visualizou_a_resposta.DataVisualizacao != None %}
+																<span class="text-primary">Visualizada {{visualizou_a_resposta.whenview}}</span> 													
+																<i class="fas fa-check-double text-primary"></i>
+															{% else %}
+																<span class="">Não Visualizada</span> 													
+																<i class="fas fa-check-double "></i>
+															{% endif %}															
+														</span>								
+													</div>													
+												</div>									
+											</div>
+										</div>			
+									<div class="col-1"></div>
+									{% for res in respostasUsuarios %}
+										{% if res.RespostaDaSolicitacao_id == r.id %}					
+											<div class="col-2 text-center align-self-center">
+													<i class="far fa-comments fs-6" ></i>
+											</div>
+																	
+											<div class="col-9 notification-body mb-1 bg-300 rounded-3 p-2">			
+												<p class="fw-bold">
+													{% if res.RespostaUsuarioResponsavel.id == r.RespostaResponsavel.id%}															
+														<span class="text-primary">											
+															<i class="far fa-comment text-dark"></i>
+															<i class="fas fa-check-circle"></i>								
+															{{res.RespostaUsuarioResponsavel.first_name}} 
+															{{res.RespostaUsuarioResponsavel.last_name}}:
+														</span>	
+													{% else %}											
+														<span class="text-dark">
+															<i class="far fa-comment"></i>	
+															<i class="fas fa-user"></i>										
+															{{res.RespostaUsuarioResponsavel.first_name}} 
+															{{res.RespostaUsuarioResponsavel.last_name}}:
+														</span>												
+													{% endif %}
+												</p>
+													{{res.RespostaDoUsuario|safe}}
+												<p class="notification-time">
+													<i class="far fa-clock"></i>
+													Comentou {{res.whenuserreplyed}}
+												</p>										
+												<hr class="text-secondary mt-0">								
+											</div>							
+											<div class="col-1"></div>
+										{% endif %}
+									{% endfor %}	
+											
+									
+									<div class="col-1"></div>							
+									<div class="col-10 text-end">
+										{% if ultimostatus.id == 2 %}
+											<form method="POST"> 
+												{% csrf_token %}
+												<button class="btn btn-falcon-primary btn-sm fs--2" autofocus type="button" data-bs-toggle="collapse" data-bs-target="#textarea{{r.id}}" aria-expanded="false" aria-controls="collapseExample">Responder</button>
+				
+												<input type="text" name="resposta_id" hidden value="{{r.id}}">	
+												<button class="btn btn-falcon-success btn-sm fs--2" name="resolvidoo" type="submit"> 
+													Resolvido / Finalizar
+												</button>										
+												<div class="collapse text-center" id="textarea{{r.id}}">
+													<div class="p-card rounded">
+														{{ form_resposta_user.RespostaDoUsuario }}
+													</div>
+													<button class="btn btn-success text-end"  name="resposta_user" id="resposta_user" type="submit">Enviar </button>
+												</div>
+											</form>	
+										{% endif %}									
+									</div>			
+									<div class="col-1"></div>
+									
+										
+									<div class="col-1"></div>							
+									<div class="col-10 text-end">
+										{% if ultimostatus.id == 5 %}
+											<form method="POST"> 
+												{% csrf_token %}
+												<button class="btn btn-falcon-primary btn-sm fs--2" autofocus type="button" data-bs-toggle="collapse" data-bs-target="#textarea{{r.id}}" aria-expanded="false" aria-controls="collapseExample">Responder</button>
+				
+												<input type="text" name="resposta_id" hidden value="{{r.id}}">	
+												<button class="btn btn-falcon-success btn-sm fs--2" name="resolvidoo" type="submit"> 
+													Resolvido / Finalizar
+												</button>										
+												<div class="collapse text-center" id="textarea{{r.id}}">
+													<div class="p-card rounded">
+														{{ form_resposta_user.RespostaDoUsuario }}
+													</div>
+													<button class="btn btn-success text-end" name="resposta_user" id="resposta_user" type="submit">Enviar </button>
+												</div>
+											</form>	
+										{% endif %}									
+									</div>			
+									<div class="col-1"></div>
+									
+								{% endfor %}
+
+								{% if details.Responsavel_id != None %}
+									<form method="POST" class="btn-group"role="group"> 
+										{% csrf_token %}
+										{% if ultimostatus.id == 1 %}	
+											<button class="btn btn-primary mt-4" type="button" autofocus data-bs-toggle="modal" data-bs-target="#resolver-modal">Responder</button>
+										{% elif ultimostatus.id == 2 %}
+											{% if verificaresposta %}
+												<button class="btn btn-danger mt-4"  name="fechar" autofocus id="fechar" type="submit">Fechar</button>
+											{% else %}									
+												<button class="btn btn-primary mt-4" type="button" autofocus data-bs-toggle="modal" data-bs-target="#resolver-modal">Responder</button>											
+											{% endif %}
+										{% elif ultimostatus.id == 3 %}	
+											<button class="btn btn-danger mt-4"  name="fechar" autofocus id="fechar" type="submit">Fechar</button>
+										{% elif ultimostatus.id == 4 %}								
+												<button class="btn btn-info mt-4"  name="reabrir" autofocus id="reabrir" type="submit">Reabrir</button>
+										{% elif ultimostatus.id == 5 %}	
+										{% if verificaresposta %}
+										<button class="btn btn-danger mt-4"  name="fechar" autofocus id="fechar" type="submit">Fechar</button>
+										{% else %}									
+											<button class="btn btn-primary mt-4" type="button" autofocus data-bs-toggle="modal" data-bs-target="#resolver-modal">Responder</button>											
+										{% endif %}									
+										{% endif %}
+										<div>
+											<button class="btn btn-warning mt-4" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Respostas Prontas</button>
+										</div>	
+									</form>	
+								{% endif %}	
+
+								<div class="col-12 ">
+									<div class="border-dashed-bottom my-3"></div>
+								</div>
+
+								{% if messages %}
+									{% for message in messages%}
+										<div {% if message.tags %} class="alert {{ message.tags }} {% endif %} border-2 d-flex align-items-center" role="alert">
+											<p class="mb-0 fs-1 text-center flex-1">{{ message}}</p>
+											<button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+										</div>
+									{% endfor %}
+								{% endif %}	
+													
+							{% comment %} DADOS DO SOLICITANTE {% endcomment %}
+								<div class="">
+									<h5 class="mb-4 mt-4 fs-4">Dados do Solicitante <i class="far fa-user-circle"></i></h5>
+								</div>
+								
+								<div class="row align-items-center text-center">
+									<div class="col-sm-6 fs-1 text-sm-start">
+										<span class="fw-bold">Posto / Graduação: </span> {{ details.PostoGradSolicitante }}
+										<br>
+										<span class="fw-bold">RE:  </span>{{ details.ReSolicitante }}
+										<br>
+										<span class="fw-bold">Nome de Guerra:  </span>{{ details.NomeGuerraSolicitante }}
+										<br>
+										<span class="fw-bold">CPF: </span> {{ details.CpfSolicitante }}
+										<br>
+										<span class="fw-bold">Função: </span> {{ details.FuncaoSolicitante }}										
+									</div>
+
+									<div class="col text-sm-end fs-1 mt-sm-0">					
+										<span class="fw-bold">Código da OPM:  </span>{{ details.CodOpmSolicitante }}
+										<br>
+										<span class="fw-bold">Grande Comando:  </span>{{ details.GrandeComandoSolicitante }}
+										<br>
+										<span class="fw-bold">Unidade:  </span>{{ details.UnidadeSolicitante }}
+										<br>
+										<span class="fw-bold">Departamento:  </span>{{ details.DepartamentoSolicitante }}
+										<br>
+										<span class="fw-bold">Divisão:  </span>{{ details.DivisaoSolicitante }}
+										<br>
+										<span class="fw-bold">Seção:  </span>{{ details.SecaoSolicitante }}
+									</div>
+
+									<div class="col-12">								
+										<hr>
+									</div>
+								</div>
+						</div>
+					</div>
+					{% comment %} FIM DO BODY {% endcomment %}
+				</div> 
+				<div class="card-footer bg-light">
+					<p class="fs--1 text-center mb-0">
+						<strong>Observação: </strong> Siga as Instruções para o Preenchimento dos dados, em caso de Dúvidas visite nosso <a href="http://dl.intranet.policiamilitar.sp.gov.br/Chamado/Ajuda/Tutoriais/">FAQ</a>
+					</p>
+				</div>  
+			</div>  
+		</div>  
+	</div> 
+</div> 
+
+<form method="POST" enctype="multipart/form-data"> 
+	{% csrf_token %}
+	<div class="modal fade" id="resolver-modal" tabindex="-2" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-centered w-100" role="document" >
+			<div class="modal-content position-relative">				
+				<div class="modal-body p-0">
+					<div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+						<h4 class="mb-1 text-center" id="modalExampleDemoLabel">Adicionar Comentário ao Chamado</h4>
+					</div>
+					<div class="p-4 pb-0">
+						<form>
+							<div class="mb-3">
+								<div class="col-12 mb-2 ">
+									{{ form_resposta.RespostaDaSolicitacao }}
+								</div>
+								<div class="col-12 mb-2 ">
+									{{ form_resposta.RespostaAnexo }}
+								</div>
+							</div>									
+						</form>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-danger" type="button" data-bs-dismiss="modal">Fechar</button>
+					<button class="btn btn-success" name="resolver" id="resolver" type="submit">Enviar </button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+<div class="modal fade" id="staticBackdrop" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  	<div class="modal-dialog modal-lg mt-6" role="document">
+    	<div class="modal-content border-0">
+      		<div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1"><button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button></div>
+      			<div class="modal-body p-0">
+        			<div class="bg-light rounded-top-lg py-3 ps-4 pe-6 text-center">
+         				 <h4 class="mb-1" id="staticBackdropLabel ">Lista de Respostas prontas</h4>          
+					</div>
+					<div class="p-4">
+						<div class="row">         
+							<div class="accordion border-x border-top rounded" id="accordionFaq">
+								{% for p in prontas %}
+									<div class="card shadow-none border-bottom rounded-bottom-0">
+										<div class="card-header p-0" id="faqAccordionHeading1">
+											<button class="accordion-button btn btn-link text-decoration-none d-block w-100 py-2 px-3 border-0 text-start collapsed" 
+											data-bs-toggle="collapse" data-bs-target="#collapseFaqAccordion{{p.id}}" aria-expanded="false" aria-controls="collapseFaqAccordion1">
+											
+											<span class="fas fa-caret-right accordion-icon me-3" data-fa-transform="shrink-2"></span>
+											<span class="fw-medium font-sans-serif text-900">{{p.TituloRespostaPronta}}</span>
+											</button>
+										</div>
+										<div class="bg-light collapse" id="collapseFaqAccordion{{p.id}}" aria-labelledby="faqAccordionHeading1" data-parent="#accordionFaq" style="">
+											<div class="card-body">
+												<p class="ps-4 mb-0">{{p.DescricaoRespostaPronta|safe}}</p>					  					  					  
+												<br/>
+											</div>
+										</div>
+									</div>
+								{% endfor %}
+							</div>              
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,150 @@
+{% load static %} 
+<nav class="navbar navbar-light navbar-vertical navbar-expand-xl">
+    <script>
+        var navbarStyle = localStorage.getItem("navbarStyle");
+        if (navbarStyle && navbarStyle !== 'transparent') {
+            document.querySelector('.navbar-vertical').classList.add(`navbar-${navbarStyle}`);
+        }
+    </script>
+    <div class="d-flex align-items-center">
+        <div class="toggle-icon-wrapper">
+            <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Recolher Menu">
+                <span class="navbar-toggle-icon">
+                    <span class="toggle-line"></span>
+                </span>
+            </button>
+        </div>
+        <a class="navbar-brand" href="{% url 'solicitation:index' %} ">
+            <div class="d-flex align-items-center py-3">
+                <img class="me-2" src="{% static 'img/logos/DP.png' %}"  width="30">
+                <span class="font-sans-serif">DP</span>
+            </div>
+        </a>
+    </div>
+    <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
+        <div class="navbar-vertical-content scrollbar">
+            <ul class="navbar-nav flex-column mb-3" id="navbarVerticalNav">
+                <li class="nav-item">
+                    <a class="" href="{% url 'solicitation:index' %} ">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-chart-pie"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">Dashboard</span>
+                        </div>
+                    </a>
+                    <ul class="nav collapse show">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'solicitation:index' %} " aria-expanded="false">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-home"></i>
+                                    <span class="nav-link-text ps-1">Home</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'solicitation:make_request' %} " aria-expanded="false">
+                                <div class="d-flex align-items-center">
+                                    <i class="far fa-plus-square"></i>
+                                    <span class="nav-link-text ps-1">Solicitar</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'solicitation:user_list_request' %} " aria-expanded="false">
+                                <div class="d-flex align-items-center">
+                                    <i class="far fa-list-alt"></i>
+                                    <span class="nav-link-text ps-1">Meus Chamados</span>
+                                </div>
+                            </a>
+                        </li>                              
+                    </ul>
+                </li>
+                <a class="nav-link" href="#Notificacoes" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="email">
+                    <div class="d-flex align-items-center">
+                        <span class="nav-link-icon">
+                            <span class="fas fa-bell text-primary"></span>
+                        </span>
+                        <span class="nav-link-text ps-1 text-primary ">Notificações</span>
+                    </div>
+                </a>
+                <ul class="nav collapse show">
+                    <li class="nav-item">   
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'notifications:list_notifications' %} " aria-expanded="false">
+                                <div class="d-flex align-items-center">
+                                    <i class="far fa-envelope"></i>
+                                    <span class="nav-link-text ps-1">Caixa de Entrada</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'notifications:list_notifications_archive' %} " aria-expanded="false">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-archive"></i>
+                                    <span class="nav-link-text ps-1">Arquivadas</span>
+                                </div>
+                            </a>
+                        </li>  
+                    </li>
+                </ul>   
+
+                {% if request.user.is_superuser == 1%}
+                    <li class="nav-item">
+                        <a class="" href="{% url 'solicitation:index' %} ">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon">
+                                    <span class="fas fa-user-cog"></span>
+                                </span>
+                                <span class="nav-link-text ps-1">Administração</span>
+                            </div>
+                        </a>
+                        <ul class="nav collapse show">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Administracao-Chamado-DP-TI/" aria-expanded="false">
+                                    <div class="d-flex align-items-center text-danger">
+                                        <i class="fas fa-lock"></i>
+                                        <span class="nav-link-text ps-1">Django ADMIN</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'administration:admin_list_request' %} " aria-expanded="false">
+                                    <div class="d-flex align-items-center">
+                                        <i class="far fa-hourglass"></i>
+                                        <span class="nav-link-text ps-1">Chamados Pendentes</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'administration:admin_list_analyse_request' %} " aria-expanded="false">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-search"></i>
+                                        <span class="nav-link-text ps-1">Chamados em Análise</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'administration:admin_list_finished_request' %} " aria-expanded="false">
+                                    <div class="d-flex align-items-center">
+                                        <i class="far fa-check-square"></i>
+                                        <span class="nav-link-text ps-1">Chamados Resolvidos</span>
+                                    </div>
+                                </a>
+                            </li> 
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'administration:admin_list_login_audit' %} " aria-expanded="false">
+                                    <div class="d-flex align-items-center">
+                                        <i class="far fa-address-card"></i>
+                                        <span class="nav-link-text ps-1">Log de Usuários</span>
+                                    </div>
+                                </a>
+                            </li>             
+                        </ul>
+                    </li>   
+                {% endif %}                 
+            </ul>
+        </div>
+    </div>
+</nav>
+<nav class="navbar-top" style="display: none;"></nav>

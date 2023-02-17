@@ -1,0 +1,5 @@
+TIPO_DE_AJUDA = (
+    (1, 'PERGUNTAS-FREQUENTES'),
+    (2, 'MODELOS-DE-CHAMADO'),
+    (3, 'TUTORIAIS'),
+)
